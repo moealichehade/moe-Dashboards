@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISCA Progress Tracker — Mohamad Ali</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117; --surface: #181c26; --surface2: #1e2330; --border: #2a2f3e;
+    --text: #e8eaf0; --muted: #7a8099; --accent-blue: #4f8ef7; --accent-green: #3ecf8e;
+    --accent-yellow: #f5c842; --accent-purple: #a78bfa; --accent-red: #f87171;
+    --accent-orange: #fb923c; --main-cert: #4f8ef7; --sfbt: #3ecf8e; --mh: #f5c842; --deij: #a78bfa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; min-height: 100vh; padding: 32px 20px 60px; }
+  .header { max-width: 1100px; margin: 0 auto 36px; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+  .header-left h1 { font-family: 'DM Serif Display', serif; font-size: 2rem; font-weight: 400; letter-spacing: -0.5px; line-height: 1.1; }
+  .header-left h1 span { color: var(--accent-blue); }
+  .header-left p { margin-top: 6px; color: var(--muted); font-size: 13px; font-weight: 300; }
+  .header-badge { background: linear-gradient(135deg, #1e2330, #252a3a); border: 1px solid var(--border); border-radius: 10px; padding: 12px 20px; text-align: right; }
+  .header-badge .date { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .header-badge .total { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: var(--accent-blue); }
+  .header-badge .total-label { font-size: 11px; color: var(--muted); }
+  .overall-bar-wrap { max-width: 1100px; margin: 0 auto 32px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .overall-bar-wrap .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; min-width: 120px; }
+  .bar-outer { flex: 1; background: var(--surface2); border-radius: 99px; height: 10px; overflow: hidden; min-width: 160px; }
+  .bar-fill { height: 100%; border-radius: 99px; transition: width 1.2s cubic-bezier(.4,0,.2,1); }
+  .bar-pct { font-family: 'DM Serif Display', serif; font-size: 1.1rem; min-width: 44px; text-align: right; }
+  .summary-grid { max-width: 1100px; margin: 0 auto 32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+  .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px 16px; position: relative; overflow: hidden; transition: transform .2s, box-shadow .2s; }
+  .summary-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+  .summary-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 14px 14px 0 0; }
+  .card-main { color: var(--accent-blue); } .card-sfbt { color: var(--sfbt); } .card-mh { color: var(--mh); } .card-deij { color: var(--deij); }
+  .card-main::before { background: var(--main-cert); } .card-sfbt::before { background: var(--sfbt); } .card-mh::before { background: var(--mh); } .card-deij::before { background: var(--deij); }
+  .card-track { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 600; margin-bottom: 8px; }
+  .card-numbers { display: flex; align-items: baseline; gap: 4px; }
+  .card-done { font-family: 'DM Serif Display', serif; font-size: 2.2rem; line-height: 1; }
+  .card-total { font-size: 1rem; color: var(--muted); }
+  .card-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .card-mini-bar { margin-top: 12px; background: var(--surface2); border-radius: 99px; height: 5px; overflow: hidden; }
+  .card-mini-fill { height: 100%; border-radius: 99px; }
+  .tabs-wrap { max-width: 1100px; margin: 0 auto 18px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .tab-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 18px; color: var(--muted); cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; transition: all .18s; outline: none; }
+  .tab-btn:hover { color: var(--text); border-color: #3a4055; }
+  .tab-btn.active { background: var(--surface2); color: var(--text); border-color: var(--accent-blue); }
+  .tab-btn.tab-calendar.active { border-color: var(--accent-orange); }
+  .panel { max-width: 1100px; margin: 0 auto; display: none; }
+  .panel.active { display: block; }
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 18px; overflow: hidden; }
+  .section-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 22px; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; transition: background .15s; }
+  .section-header:hover { background: var(--surface2); }
+  .section-title { display: flex; align-items: center; gap: 10px; }
+  .section-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .section-name { font-family: 'DM Serif Display', serif; font-size: 1.05rem; font-weight: 400; }
+  .section-chips { display: flex; gap: 8px; align-items: center; }
+  .chip { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 99px; }
+  .chip-done { background: rgba(62,207,142,.12); color: var(--sfbt); }
+  .chip-remaining { background: rgba(248,113,113,.1); color: var(--accent-red); }
+  .chevron { color: var(--muted); transition: transform .2s; font-size: 14px; }
+  .section.collapsed .chevron { transform: rotate(-90deg); }
+  .section.collapsed .section-body { display: none; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th { background: var(--surface2); padding: 10px 18px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); font-weight: 600; }
+  tbody tr { border-top: 1px solid var(--border); transition: background .12s; }
+  tbody tr:hover { background: rgba(255,255,255,.025); }
+  td { padding: 12px 18px; vertical-align: middle; }
+  .td-code { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: .5px; white-space: nowrap; }
+  .td-name { font-size: 13px; }
+  .status-pill { display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 99px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+  .pill-done { background: rgba(62,207,142,.12); color: var(--sfbt); }
+  .pill-todo { background: rgba(248,113,113,.1); color: var(--accent-red); }
+  .pill-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+  .td-date { font-size: 12px; color: var(--muted); }
+  .date-highlight { color: var(--accent-yellow); font-weight: 600; font-size: 12px; }
+  .calendar-section { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 18px; }
+  .cal-header { padding: 16px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .cal-icon { width: 32px; height: 32px; border-radius: 8px; background: rgba(251,146,60,.15); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .cal-header-text h3 { font-family: 'DM Serif Display', serif; font-size: 1rem; font-weight: 400; }
+  .cal-header-text p { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .cal-events-list { padding: 12px 0; }
+  .cal-event-item { display: flex; align-items: flex-start; gap: 16px; padding: 14px 22px; border-top: 1px solid var(--border); transition: background .12s; }
+  .cal-event-item:first-child { border-top: none; }
+  .cal-event-item:hover { background: rgba(255,255,255,.025); }
+  .cal-date-block { min-width: 46px; text-align: center; background: var(--surface2); border-radius: 9px; padding: 8px 6px; flex-shrink: 0; }
+  .cal-month { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); font-weight: 600; }
+  .cal-day { font-family: 'DM Serif Display', serif; font-size: 1.4rem; line-height: 1; color: var(--accent-orange); }
+  .cal-event-info { flex: 1; min-width: 0; }
+  .cal-event-title { font-size: 13px; font-weight: 500; line-height: 1.35; margin-bottom: 5px; }
+  .cal-event-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .cal-meta-tag { font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
+  .tag-live { background: rgba(79,142,247,.15); color: var(--accent-blue); }
+  .tag-async { background: rgba(122,128,153,.12); color: var(--muted); }
+  .tag-deadline { background: rgba(245,200,66,.12); color: var(--accent-yellow); }
+  .cal-time { font-size: 11px; color: var(--muted); }
+  .cal-course-tag { font-size: 10px; color: var(--muted); margin-top: 3px; }
+  @media (max-width: 640px) { body { padding: 20px 12px 40px; } .header-left h1 { font-size: 1.5rem; } table { font-size: 12px; } td, thead th { padding: 10px 12px; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>ISCA Progress <span>Tracker</span></h1>
+    <p>Mohamad Ali · Certification + Specialization Tracks · May 2026</p>
+  </div>
+  <div class="header-badge">
+    <div class="date">Overall completion</div>
+    <div class="total">19 / 33</div>
+    <div class="total-label">courses completed</div>
+  </div>
+</div>
+<div class="overall-bar-wrap">
+  <div class="label">Total Progress</div>
+  <div class="bar-outer"><div class="bar-fill" style="width:57.6%;background:linear-gradient(90deg,var(--accent-blue),var(--sfbt))"></div></div>
+  <div class="bar-pct" style="color:var(--accent-blue)">58%</div>
+</div>
+<div class="summary-grid">
+  <div class="summary-card card-main"><div class="card-track">Main Certification</div><div class="card-numbers"><div class="card-done">13</div><div class="card-total">/ 17</div></div><div class="card-label">4 courses remaining</div><div class="card-mini-bar"><div class="card-mini-fill" style="width:76.5%;background:var(--main-cert)"></div></div></div>
+  <div class="summary-card card-sfbt"><div class="card-track">SFBT Specialization</div><div class="card-numbers"><div class="card-done">0</div><div class="card-total">/ 4</div></div><div class="card-label">4 courses remaining</div><div class="card-mini-bar"><div class="card-mini-fill" style="width:0%;background:var(--sfbt)"></div></div></div>
+  <div class="summary-card card-mh"><div class="card-track">Mental Health Spec.</div><div class="card-numbers"><div class="card-done">5</div><div class="card-total">/ 10</div></div><div class="card-label">5 courses remaining</div><div class="card-mini-bar"><div class="card-mini-fill" style="width:50%;background:var(--mh)"></div></div></div>
+  <div class="summary-card card-deij"><div class="card-track">DEIJ Specialization</div><div class="card-numbers"><div class="card-done">1</div><div class="card-total">/ 6</div></div><div class="card-label">5 remaining (1 LGBTQ+ req.)</div><div class="card-mini-bar"><div class="card-mini-fill" style="width:16.7%;background:var(--deij)"></div></div></div>
+</div>
+<div class="tabs-wrap">
+  <button class="tab-btn active" onclick="switchTab('main',this)">Main Certification</button>
+  <button class="tab-btn" onclick="switchTab('sfbt',this)">SFBT</button>
+  <button class="tab-btn" onclick="switchTab('mh',this)">Mental Health</button>
+  <button class="tab-btn" onclick="switchTab('deij',this)">DEIJ</button>
+  <button class="tab-btn tab-calendar" onclick="switchTab('calendar',this)">📅 Upcoming Sessions</button>
+</div>
+
+<div class="panel active" id="panel-main">
+  <div class="section" id="sec-main">
+    <div class="section-header" onclick="toggleSection('sec-main')"><div class="section-title"><div class="section-dot" style="background:var(--main-cert)"></div><span class="section-name">ISCA Certified Counselor Program</span></div><div class="section-chips"><span class="chip chip-done">13 done</span><span class="chip chip-remaining">4 left</span><span class="chevron">▾</span></div></div>
+    <div class="section-body"><table><thead><tr><th>Code</th><th>Course Name</th><th>Status</th><th>Next / Notes</th></tr></thead><tbody>
+      <tr><td class="td-code">ISCA 101</td><td class="td-name">Foundations of ISCA Model</td><td><span class="status-pill pill-done"><span class="pill-dot"></span>Completed</span></td><td class="td-date">—</td></tr>
+      <tr><td class="td-code">ISCA 102</td><td class="td-name">Data-Driven Practices</td><td><span class="status-pill pill-done"><span class="pill-dot"></span>Completed</span></td><td class="td-date">—</td></tr>
+      <tr><td class="td-code">ISCA 201</td><td class="td-name">ISCA Student Standards</td><td><span class="status-pill pill-done"><span class="pill-dot"></span>Completed</span></td><td class="td-date">—</td></tr>
+      <tr><td class="td-code">ISCA 310</td><td class="td-name">Supporting Student Mental Health</td><td><span class="status-pill pill-done"><span class="pill-dot"></span>Completed</span></td><td class="td-date">—</td></tr>
+      <tr><td class="td-code">ISCA 311</td><td class="td-name">Student Protection</td><td><span class="status-pill pill-done"><span class="pill-dot"></span>Completed</span></td><td class="td-date">—</td></tr>
+      <tr><td class="td-code">ISCA 601</td><td class="td-name">Psychoeducational Reports</td><td><span class="status-pill pill-done"><span class="pill-dot"></span>Completed</span></td><td class="td-date">—</td></tr>
+      <tr><td class="td-code">ISCA 603</td><td class="td-name">MTSS</td><td><span class="status-pill pill-done"><span class="pill-dot"></span>Completed</span></td><td class="td-date">—</td></tr>
+      <tr><td class="td-code">ISCA 604</td><td class="td-name">Supporting Anxious Youth</td><td><span class="status-pill pill-done"><span class="pill-dot"></span>Completed</span></td><td class="td-date">—</td></tr>
+      <tr><td class="td-code">ISCA 801</td><td class="td-name">CBT Foundations</td><td><span class="status-pill pill-done"><span class="pill-dot"></span>Completed</span></td><td class="td-date">—</td></tr>
+      <tr><td class="td-code">ISCA 906</td><td class="td-name">Ethics</td><td><span class="status-pill pill-done"><span class="pill-dot"></span>Completed</span></td><td class="td-date">—</td></tr>
+      <tr><td class="td-code">ISCA 907</td><td class="td-name">Counselor Leadership</td><td><span class="status-pill pill-done"><span class="pill-dot"></span>Completed</span></td><td class="td-date">—</td></tr>
+      <tr><td class="td-code">ISCA 405</td><td class="td-name">Culturally Competent Counseling</td><td><span class="status-pill pill-done"><span class="pill-dot"></span>Completed</span></td><td class="td-date">—</td></tr>
+      <tr><td class="td-code">ISCA 312</td><td class="td-name">Self-Injury</td><td><span class="status-pill pill-done"><span class="pill-dot"></span>Completed</span></td><td class="td-date">—</td></tr>
+      <tr><td class="td-code">ISCA 606</td><td class="td-name">Group Counseling Essentials</td><td><span class="status-pill pill-todo"><span class="pill-dot"></span>Remaining</span></td><td class="td-date">Coming Soon</td></tr>
+      <tr><td class="td-code">ISCA 307</td><td class="td-name">Trauma-Informed Care Essentials</td><td><span class="status-pill pill-todo"><span class="pill-dot"></span>Remaining</span></td><td class="date-highlight">Expected 2026 cycle</td></tr>
+      <tr><td class="td-code">ISCA 902</td><td class="td-name">Program Management</td><td><span class="status-pill pill-todo"><span class="pill-dot"></span>Remaining</span></td><td class="date-highlight">Expected 2026</td></tr>
+      <tr><td class="td-code">ISCA 507</td><td class="td-name">Wellbeing &amp; Resilience</td><td><span class="status-pill pill-todo"><span class="pill-dot"></span>Remaining</span></td><td class="td-date">Coming Soon</td></tr>
+    </tbody></table></div>
+  </div>
+</div>
+
+<div class="panel" id="panel-sfbt">
+  <div class="section" id="sec-sfbt">
+    <div class="section-header" onclick="toggleSection('sec-sfbt')"><div class="section-title"><div class="section-dot" style="background:var(--sfbt)"></div><span class="section-name">SFBT Specialization</span></div><div class="section-chips"><span class="chip chip-done">0 done</span><span class="chip chip-remaining">4 left</span><span class="chevron">▾</span></div></div>
+    <div class="section-body"><table><thead><tr><th>Code</th><th>Course Name</th><th>Status</th><th>Next / Notes</th></tr></thead><tbody>
+      <tr><td class="td-code">ISCA 803</td><td class="td-name">SFBT Foundations Part 1</td><td><span class="status-pill pill-todo"><span class="pill-dot"></span>Remaining</span></td><td class="date-highlight">Jun 23, 25, 30 OR Oct 2026</td></tr>
+      <tr><td class="td-code">ISCA 804</td><td class="td-name">SFBT Foundations Part 2</td><td><span class="status-pill pill-todo"><span class="pill-dot"></span>Remaining</span></td><td class="date-highlight">Jul 14, 16, 21, 2026</td></tr>
+      <tr><td class="td-code">ISCA 805</td><td class="td-name">SFBT Micro Skills</td><td><span class="status-pill pill-todo"><span class="pill-dot"></span>Remaining</span></td><td class="td-date">Mar 2, 9, 16, 23 (passed)</td></tr>
+      <tr><td class="td-code">ISCA 806</td><td class="td-name">SFBT Supervision</td><td><span class="status-pill pill-todo"><span class="pill-dot"></span>Remaining</span></td><td class="td-date">Coming Soon / TBA</td></tr>
+    </tbody></table></div>
+  </div>
+</div>
+<div class="panel" id="panel-mh">
+  <div class="section" id="sec-mh">
+    <div class="section-header" onclick="toggleSection('sec-mh')"><div class="section-title"><div class="section-dot" style="background:var(--mh)"></div><span class="section-name">Mental Health Specialization</span></div><div class="section-chips"><span class="chip chip-done">5 done</span><span class="chip chip-remaining">5 left</span><span class="chevron">▾</span></div></div>
+    <div class="section-body"><table><thead><tr><th>Code</th><th>Course Name</th><th>Status</th><th>Next / Notes</th></tr></thead><tbody>
+      <tr><td class="td-code">ISCA 302</td><td class="td-name">Youth Mental Health First Aid</td><td><span class="status-pill pill-done"><span class="pill-dot"></span>Completed</span></td><td class="td-date">—</td></tr>
+      <tr><td class="td-code">ISCA 304</td><td class="td-name">Advanced Trauma-Informed Care</td><td><span class="status-pill pill-done"><span class="pill-dot"></span>Completed</span></td><td class="td-date">—</td></tr>
+      <tr><td class="td-code">ISCA 310</td><td class="td-name">Student Mental Health</td><td><span class="status-pill pill-done"><span class="pill-dot"></span>Completed</span></td><td class="td-date">—</td></tr>
+      <tr><td class="td-code">ISCA 312</td><td class="td-name">Self-Injury</td><td><span class="status-pill pill-done"><span class="pill-dot"></span>Completed</span></td><td class="td-date">—</td></tr>
+      <tr><td class="td-code">ISCA 604</td><td class="td-name">Supporting Anxious Youth</td><td><span class="status-pill pill-done"><span class="pill-dot"></span>Completed</span></td><td class="td-date">—</td></tr>
+      <tr><td class="td-code">ISCA 403</td><td class="td-name">Trauma-Informed Care Essentials</td><td><span class="status-pill pill-todo"><span class="pill-dot"></span>Remaining</span></td><td class="date-highlight">Expected 2026 cycle</td></tr>
+      <tr><td class="td-code">ISCA 313</td><td class="td-name">Advanced Mental Health Strategies</td><td><span class="status-pill pill-todo"><span class="pill-dot"></span>Remaining</span></td><td class="td-date">Coming Soon</td></tr>
+      <tr><td class="td-code">ISCA 314</td><td class="td-name">Mental Health Policies</td><td><span class="status-pill pill-todo"><span class="pill-dot"></span>Remaining</span></td><td class="td-date">Coming Soon</td></tr>
+      <tr><td class="td-code">ISCA 315</td><td class="td-name">Death in School Community</td><td><span class="status-pill pill-todo"><span class="pill-dot"></span>Remaining</span></td><td class="td-date">Coming Soon</td></tr>
+      <tr><td class="td-code">ISCA 309</td><td class="td-name">Youth Suicide Prevention</td><td><span class="status-pill pill-todo"><span class="pill-dot"></span>Remaining</span></td><td class="td-date">Coming Soon</td></tr>
+    </tbody></table></div>
+  </div>
+</div>
+
+<div class="panel" id="panel-deij">
+  <div class="section" id="sec-deij">
+    <div class="section-header" onclick="toggleSection('sec-deij')"><div class="section-title"><div class="section-dot" style="background:var(--deij)"></div><span class="section-name">DEIJ Specialization</span></div><div class="section-chips"><span class="chip chip-done">1 done</span><span class="chip chip-remaining">5 left</span><span class="chevron">▾</span></div></div>
+    <div class="section-body"><table><thead><tr><th>Code</th><th>Course Name</th><th>Status</th><th>Next / Notes</th></tr></thead><tbody>
+      <tr><td class="td-code">ISCA 405</td><td class="td-name">Culturally Competent Counseling</td><td><span class="status-pill pill-done"><span class="pill-dot"></span>Completed</span></td><td class="td-date">—</td></tr>
+      <tr><td class="td-code">ISCA 404</td><td class="td-name">Restorative Conversations</td><td><span class="status-pill pill-todo"><span class="pill-dot"></span>Remaining</span></td><td class="td-date">Coming Soon</td></tr>
+      <tr><td class="td-code">ISCA 406</td><td class="td-name">Microaggressions</td><td><span class="status-pill pill-todo"><span class="pill-dot"></span>Remaining</span></td><td class="td-date">Feb 18 (passed)</td></tr>
+      <tr><td class="td-code">ISCA 407</td><td class="td-name">LGBTQ+ Foundations</td><td><span class="status-pill pill-todo"><span class="pill-dot"></span>Remaining</span></td><td class="td-date">Nov 2025 (passed)</td></tr>
+      <tr><td class="td-code">ISCA 408</td><td class="td-name">Deepening Cultural Competence</td><td><span class="status-pill pill-todo"><span class="pill-dot"></span>Remaining</span></td><td class="date-highlight">Apr 8, 15, 22 (passed)</td></tr>
+      <tr><td class="td-code">ISCA 409</td><td class="td-name">LGBTQ+ Policies &amp; Safeguarding</td><td><span class="status-pill pill-todo"><span class="pill-dot"></span>Remaining</span></td><td class="date-highlight">May 19 &amp; 26, 2026</td></tr>
+    </tbody></table>
+    <div style="padding:12px 18px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);">Note: Only one LGBTQ+ course is required (ISCA 407 or ISCA 409).</div>
+    </div>
+  </div>
+</div>
+
+<div class="panel" id="panel-calendar">
+  <div class="calendar-section">
+    <div class="cal-header"><div class="cal-icon">📅</div><div class="cal-header-text"><h3>Upcoming ISCA Sessions from Google Calendar</h3><p>Live sessions, deadlines, and self-paced milestones — May to September 2026</p></div></div>
+    <div class="cal-events-list">
+      <div class="cal-event-item"><div class="cal-date-block"><div class="cal-month">May</div><div class="cal-day">7</div></div><div class="cal-event-info"><div class="cal-event-title">Data-Driven Practices in School Counseling</div><div class="cal-event-meta"><span class="cal-meta-tag tag-live">Live Session</span><span class="cal-time">4:30 PM – 7:30 PM IST</span></div><div class="cal-course-tag">ISCA 102-01 · Virtual (3 Sessions)</div></div></div>
+      <div class="cal-event-item"><div class="cal-date-block"><div class="cal-month">May</div><div class="cal-day">18</div></div><div class="cal-event-info"><div class="cal-event-title">Student Protection and Advocacy — Session 1</div><div class="cal-event-meta"><span class="cal-meta-tag tag-live">Live Session</span><span class="cal-time">5:30 PM – 8:30 PM IST</span></div><div class="cal-course-tag">ISCA 311-01 · Virtual via Zoom</div></div></div>
+      <div class="cal-event-item"><div class="cal-date-block"><div class="cal-month">May</div><div class="cal-day">20</div></div><div class="cal-event-info"><div class="cal-event-title">ISCA 906-01 — Initial Post Due</div><div class="cal-event-meta"><span class="cal-meta-tag tag-deadline">Deadline</span><span class="cal-time">10:00 AM IST</span></div><div class="cal-course-tag">Ethics in School Counseling · Asynchronous</div></div></div>
+      <div class="cal-event-item"><div class="cal-date-block"><div class="cal-month">May</div><div class="cal-day">21</div></div><div class="cal-event-info"><div class="cal-event-title">Implementing ISCA Student Standards: SEL — Session 1</div><div class="cal-event-meta"><span class="cal-meta-tag tag-live">Live Session</span><span class="cal-time">4:30 PM – 7:30 PM IST</span></div><div class="cal-course-tag">ISCA 201-03 · Virtual via Zoom</div></div></div>
+      <div class="cal-event-item"><div class="cal-date-block"><div class="cal-month">May</div><div class="cal-day">25</div></div><div class="cal-event-info"><div class="cal-event-title">Student Protection and Advocacy — Session 2</div><div class="cal-event-meta"><span class="cal-meta-tag tag-live">Live Session</span><span class="cal-time">5:30 PM – 8:30 PM IST</span></div><div class="cal-course-tag">ISCA 311-01 · Virtual via Zoom</div></div></div>
+      <div class="cal-event-item"><div class="cal-date-block"><div class="cal-month">May</div><div class="cal-day">31</div></div><div class="cal-event-info"><div class="cal-event-title">ISCA 906-01 — Peer Responses Due</div><div class="cal-event-meta"><span class="cal-meta-tag tag-deadline">Deadline</span><span class="cal-time">10:00 AM IST</span></div><div class="cal-course-tag">Ethics in School Counseling · Asynchronous</div></div></div>
+      <div class="cal-event-item"><div class="cal-date-block"><div class="cal-month">Jun</div><div class="cal-day">1</div></div><div class="cal-event-info"><div class="cal-event-title">Counselor Leadership — Live Session 1: Module 1 Discussion</div><div class="cal-event-meta"><span class="cal-meta-tag tag-live">Live Session</span><span class="cal-time">4:30 PM – 6:00 PM IST</span></div><div class="cal-course-tag">ISCA-02 · Virtual via Zoom · 90 min</div></div></div>
+      <div class="cal-event-item"><div class="cal-date-block"><div class="cal-month">Jun</div><div class="cal-day">15</div></div><div class="cal-event-info"><div class="cal-event-title">Counselor Leadership — Work on Modules 2 &amp; 3</div><div class="cal-event-meta"><span class="cal-meta-tag tag-async">Self-Paced</span><span class="cal-time">4:30 PM – 7:30 PM IST</span></div><div class="cal-course-tag">ISCA-02 · Approx. 4-6 hours each module</div></div></div>
+      <div class="cal-event-item"><div class="cal-date-block"><div class="cal-month">Jun</div><div class="cal-day">20</div></div><div class="cal-event-info"><div class="cal-event-title">ISCA 906-01 — Initial Post Due (Module 2)</div><div class="cal-event-meta"><span class="cal-meta-tag tag-deadline">Deadline</span><span class="cal-time">10:00 AM IST</span></div><div class="cal-course-tag">Ethics · Asynchronous</div></div></div>
+      <div class="cal-event-item"><div class="cal-date-block"><div class="cal-month">Jun</div><div class="cal-day">30</div></div><div class="cal-event-info"><div class="cal-event-title">ISCA 906-01 — Peer Responses Due (Module 2)</div><div class="cal-event-meta"><span class="cal-meta-tag tag-deadline">Deadline</span><span class="cal-time">10:00 AM IST</span></div><div class="cal-course-tag">Ethics · Asynchronous</div></div></div>
+      <div class="cal-event-item"><div class="cal-date-block"><div class="cal-month">Jul</div><div class="cal-day">31</div></div><div class="cal-event-info"><div class="cal-event-title">ISCA 906-01 — Peer Responses Due (Module 3)</div><div class="cal-event-meta"><span class="cal-meta-tag tag-deadline">Deadline</span><span class="cal-time">10:00 AM IST</span></div><div class="cal-course-tag">Ethics · Asynchronous</div></div></div>
+      <div class="cal-event-item"><div class="cal-date-block"><div class="cal-month">Sep</div><div class="cal-day">14</div></div><div class="cal-event-info"><div class="cal-event-title">Counselor Leadership — Live Session 2: Modules 2 &amp; 3 Review</div><div class="cal-event-meta"><span class="cal-meta-tag tag-live">Live Session</span><span class="cal-time">4:30 PM – 6:00 PM IST</span></div><div class="cal-course-tag">ISCA-02 · Virtual via Zoom · 90 min</div></div></div>
+      <div class="cal-event-item"><div class="cal-date-block"><div class="cal-month">Sep</div><div class="cal-day">30</div></div><div class="cal-event-info"><div class="cal-event-title">Counselor Leadership — Course Ends, All Tasks Due</div><div class="cal-event-meta"><span class="cal-meta-tag tag-deadline">Final Deadline</span><span class="cal-time">4:30 PM IST</span></div><div class="cal-course-tag">ISCA-02 · All modules must be submitted</div></div></div>
+    </div>
+  </div>
+</div>
+<script>
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + tab).classList.add('active');
+    btn.classList.add('active');
+  }
+  function toggleSection(id) { document.getElementById(id).classList.toggle('collapsed'); }
+  window.addEventListener('load', () => {
+    document.querySelectorAll('.bar-fill, .card-mini-fill').forEach(el => {
+      const w = el.style.width; el.style.width = '0';
+      setTimeout(() => { el.style.width = w; }, 100);
+    });
+  });
+</script>
+</body>
+</html>
