@@ -134,8 +134,10 @@ select:hover,select:focus{border-color:var(--accent);}
         </select>
       </div>
       <div class="dd-wrap">
-        <select id="cal-days" onchange="filterCalendar()">
-          <option value="7">This Week</option>
+        <select id="cal-range" onchange="loadCalendar()">
+          <option value="today">Today</option>
+          <option value="week" selected>Week Ahead</option>
+          <option value="weekend">Weekend</option>
           <option value="14">Next 2 Weeks</option>
           <option value="30">This Month</option>
         </select>
@@ -148,18 +150,10 @@ select:hover,select:focus{border-color:var(--accent);}
   <!-- GMAIL -->
   <div class="panel" id="panel-mail">
     <div class="panel-header">
-      <div class="panel-title"><div class="panel-icon icon-mail">✉️</div>Gmail</div>
-      <div class="dd-wrap">
-        <select id="mail-filter" onchange="filterMail()">
-          <option value="all">All Recent</option>
-          <option value="unread">🔴 Unread</option>
-          <option value="INBOX">Inbox</option>
-          <option value="SENT">Sent</option>
-        </select>
-      </div>
+      <div class="panel-title"><div class="panel-icon icon-mail">✉️</div>Gmail <span style="font-size:10px;background:rgba(240,112,112,0.15);color:#f07070;padding:2px 7px;border-radius:20px;margin-left:4px;font-weight:600;">UNREAD ONLY</span></div>
       <button class="refresh-btn" onclick="loadMail()">↻</button>
     </div>
-    <div class="panel-body" id="mail-body"><div class="signin-prompt"><p>Connect Google to see your live Gmail inbox.</p><button onclick="handleAuth()">🔐 Connect Google</button></div></div>
+    <div class="panel-body" id="mail-body"><div class="signin-prompt"><p>Connect Google to see your unread emails.</p><button onclick="handleAuth()">🔐 Connect Google</button></div></div>
   </div>
 
   <!-- REMINDERS (static - no Apple API) -->
@@ -239,12 +233,29 @@ function handleAuth() {
 async function loadCalendar() {
   if (!accessToken) return;
   document.getElementById('cal-body').innerHTML = '<div class="loading">Loading calendar...</div>';
-  const days = parseInt(document.getElementById('cal-days').value) || 7;
-  const now = new Date();
-  const end = new Date(now);
-  end.setDate(end.getDate() + days);
+  const range = document.getElementById('cal-range').value;
 
-  const url = `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${now.toISOString()}&timeMax=${end.toISOString()}&singleEvents=true&orderBy=startTime&maxResults=50`;
+  const now = new Date();
+  let timeMin, timeMax;
+
+  if (range === 'today') {
+    timeMin = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+    timeMax = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+  } else if (range === 'week') {
+    timeMin = now;
+    timeMax = new Date(now); timeMax.setDate(timeMax.getDate() + 7);
+  } else if (range === 'weekend') {
+    // find next Friday
+    const day = now.getDay(); // 0=Sun,1=Mon,...,5=Fri,6=Sat
+    const daysToFri = day <= 5 ? 5 - day : 6;
+    timeMin = new Date(now.getFullYear(), now.getMonth(), now.getDate() + daysToFri, 0, 0, 0);
+    timeMax = new Date(now.getFullYear(), now.getMonth(), now.getDate() + daysToFri + 2, 23, 59, 59);
+  } else {
+    timeMin = now;
+    timeMax = new Date(now); timeMax.setDate(timeMax.getDate() + parseInt(range));
+  }
+
+  const url = `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${timeMin.toISOString()}&timeMax=${timeMax.toISOString()}&singleEvents=true&orderBy=startTime&maxResults=50`;
 
   try {
     const resp = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
@@ -262,7 +273,7 @@ async function loadCalendar() {
       const bData = await bResp.json();
       const birthdayCal = (bData.items || []).find(c => c.summary === 'Birthdays' || c.id.includes('contacts#contacts'));
       if (birthdayCal) {
-        const bEvResp = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(birthdayCal.id)}/events?timeMin=${now.toISOString()}&timeMax=${end.toISOString()}&singleEvents=true&orderBy=startTime&maxResults=20`, { headers: { Authorization: `Bearer ${accessToken}` } });
+        const bEvResp = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(birthdayCal.id)}/events?timeMin=${timeMin.toISOString()}&timeMax=${timeMax.toISOString()}&singleEvents=true&orderBy=startTime&maxResults=20`, { headers: { Authorization: `Bearer ${accessToken}` } });
         const bEvData = await bEvResp.json();
         const bEvents = (bEvData.items || []).map(e => ({ title: e.summary || '(No title)', date: formatEventDate(e.start), src: 'Birthdays', color: '#f07070' }));
         allCalEvents = [...allCalEvents, ...bEvents];
@@ -298,19 +309,26 @@ function filterCalendar() {
     </div>`).join('');
 }
 
-// ── GMAIL ─────────────────────────────────────────────────────────────────────
+// ── GMAIL (unread only) ───────────────────────────────────────────────────────
 async function loadMail() {
   if (!accessToken) return;
-  document.getElementById('mail-body').innerHTML = '<div class="loading">Loading emails...</div>';
+  document.getElementById('mail-body').innerHTML = '<div class="loading">Loading unread emails...</div>';
 
   try {
-    const resp = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=20&labelIds=INBOX', {
+    const resp = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=25&labelIds=INBOX&labelIds=UNREAD', {
       headers: { Authorization: `Bearer ${accessToken}` }
     });
     const data = await resp.json();
     const messages = data.messages || [];
 
-    const details = await Promise.all(messages.slice(0, 15).map(m =>
+    if (!messages.length) {
+      document.getElementById('stat-mail').textContent = '0';
+      document.getElementById('stat-unread').textContent = '';
+      document.getElementById('mail-body').innerHTML = '<div class="empty">🎉 No unread emails!</div>';
+      return;
+    }
+
+    const details = await Promise.all(messages.slice(0, 20).map(m =>
       fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${m.id}?format=metadata&metadataHeaders=Subject&metadataHeaders=From&metadataHeaders=Date`, {
         headers: { Authorization: `Bearer ${accessToken}` }
       }).then(r => r.json())
@@ -319,21 +337,27 @@ async function loadMail() {
     allEmails = details.map(m => {
       const headers = m.payload?.headers || [];
       const get = name => (headers.find(h => h.name === name) || {}).value || '';
-      const isUnread = (m.labelIds || []).includes('UNREAD');
       return {
         subject: get('Subject') || '(No subject)',
         sender: get('From').replace(/<.*>/, '').trim(),
         date: formatMailDate(get('Date')),
-        snippet: m.snippet || '',
-        unread: isUnread,
-        labels: m.labelIds || []
+        snippet: m.snippet || ''
       };
     });
 
-    const unreadCount = allEmails.filter(e => e.unread).length;
     document.getElementById('stat-mail').textContent = allEmails.length;
-    document.getElementById('stat-unread').textContent = unreadCount > 0 ? `${unreadCount} unread` : '';
-    filterMail();
+    document.getElementById('stat-unread').textContent = `${allEmails.length} unread`;
+
+    const body = document.getElementById('mail-body');
+    body.innerHTML = allEmails.map(e => `
+      <div class="item" style="border-left:3px solid var(--accent);padding-left:12px;">
+        <div class="item-dot" style="background:var(--accent)"></div>
+        <div class="item-content">
+          <div class="item-title" style="font-weight:700;">🔵 ${e.subject}</div>
+          <div class="item-meta">${e.sender} · ${e.date} <span style="color:var(--accent);font-weight:600;font-size:10px;">UNREAD</span></div>
+          <div class="item-snippet">${e.snippet}</div>
+        </div>
+      </div>`).join('');
   } catch(e) {
     document.getElementById('mail-body').innerHTML = '<div class="empty">Error loading emails.</div>';
   }
@@ -347,24 +371,6 @@ function formatMailDate(dateStr) {
     if (d.toDateString() === today.toDateString()) return 'Today ' + d.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
     return d.toLocaleDateString('en-US', { month:'short', day:'numeric' });
   } catch(e) { return dateStr; }
-}
-
-function filterMail() {
-  const f = document.getElementById('mail-filter').value;
-  let items = allEmails;
-  if (f === 'unread') items = items.filter(e => e.unread);
-  else if (f === 'SENT') items = items.filter(e => e.labels.includes('SENT'));
-  const body = document.getElementById('mail-body');
-  if (!items.length) { body.innerHTML = '<div class="empty">No emails found.</div>'; return; }
-  body.innerHTML = items.map(e => `
-    <div class="item" style="${e.unread ? 'border-left:3px solid var(--accent);padding-left:12px;' : ''}">
-      <div class="item-dot" style="background:${e.unread ? 'var(--accent)' : 'var(--muted)'}"></div>
-      <div class="item-content">
-        <div class="item-title" style="${e.unread ? 'font-weight:700;' : ''}">${e.unread ? '🔵 ' : ''}${e.subject}</div>
-        <div class="item-meta">${e.sender} · ${e.date}${e.unread ? ' <span style="color:var(--accent);font-weight:600;font-size:10px;">UNREAD</span>' : ''}</div>
-        <div class="item-snippet">${e.snippet}</div>
-      </div>
-    </div>`).join('');
 }
 
 // ── REMINDERS (static) ────────────────────────────────────────────────────────
