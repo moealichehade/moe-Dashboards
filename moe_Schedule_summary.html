@@ -36,13 +36,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .sel-tab{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:7px 14px;font-size:12px;font-weight:500;cursor:pointer;color:var(--muted);transition:all .2s;user-select:none;}
 .sel-tab:hover{border-color:var(--accent);color:var(--text);}
 .sel-tab.active{background:var(--accent);border-color:var(--accent);color:#fff;}
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:14px 22px;max-width:1420px;margin:0 auto;}
+.stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:14px 22px;max-width:1420px;margin:0 auto;}
 @media(max-width:820px){.stats-row{grid-template-columns:repeat(2,1fr);}}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 16px;display:flex;align-items:center;gap:12px;transition:background .3s;}
 .stat-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
 .stat-val{font-size:22px;font-weight:600;color:var(--text);line-height:1;}
 .stat-label{font-size:11px;color:var(--muted);margin-top:2px;}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:0 22px 22px;max-width:1420px;margin:0 auto;}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:0 22px 22px;max-width:1420px;margin:0 auto;}
 @media(max-width:1100px){.grid{grid-template-columns:1fr 1fr;}}
 @media(max-width:680px){.grid{grid-template-columns:1fr;padding:0 12px 16px;}}
 .grid.two-col{grid-template-columns:1fr 1fr;}
@@ -111,13 +111,11 @@ select:hover,select:focus{border-color:var(--accent);}
 <div class="selector-bar">
   <div class="sel-tab active" onclick="togglePanel('cal',this)"><span>📅</span> Calendar</div>
   <div class="sel-tab active" onclick="togglePanel('mail',this)"><span>✉️</span> Gmail</div>
-  <div class="sel-tab active" onclick="togglePanel('rem',this)"><span>🔔</span> Reminders</div>
 </div>
 
 <div class="stats-row">
   <div class="stat-card"><div class="stat-icon" style="background:rgba(79,142,247,0.12)">📅</div><div><div class="stat-val" id="stat-cal">—</div><div class="stat-label">Events this week</div></div></div>
   <div class="stat-card"><div class="stat-icon" style="background:rgba(109,213,181,0.12)">✉️</div><div><div class="stat-val" id="stat-mail">—</div><div class="stat-label">Emails · <span id="stat-unread" style="color:var(--accent)"></span></div></div></div>
-  <div class="stat-card"><div class="stat-icon" style="background:rgba(240,160,90,0.12)">🔔</div><div><div class="stat-val" id="stat-rem">47</div><div class="stat-label">Active reminders</div></div></div>
 </div>
 
 <div class="grid" id="main-grid">
@@ -380,75 +378,14 @@ function formatMailDate(dateStr) {
   } catch(e) { return dateStr; }
 }
 
-// ── REMINDERS (static) ────────────────────────────────────────────────────────
-const reminders=[
-  {list:"Morning Alignments",title:"Meditate for 10 minutes",due:"Daily · 9:00 AM",priority:"high"},
-  {list:"Morning Alignments",title:"Drink glass of water",due:"Daily · 8:30 AM",priority:"high"},
-  {list:"Morning Alignments",title:"Workout 10 mins",due:"Mon–Fri",priority:"high"},
-  {list:"Morning Alignments",title:"Yoga 10 mins",due:"Sat–Sun",priority:"high"},
-  {list:"SNHU",title:"Double check all discussions",due:"Weekly · Sun",priority:"medium"},
-  {list:"MoMento24-7",title:"Record episode 8 (overdue)",due:"Apr 20",priority:"high"},
-  {list:"MoMento24-7",title:"Record episode 9 (overdue)",due:"Apr 27",priority:"high"},
-  {list:"MoMento24-7",title:"Record episode 10",due:"May 4",priority:"high"},
-  {list:"MoMento24-7",title:"Record episode 11",due:"May 11",priority:"high"},
-  {list:"MoMento24-7",title:"Record episode 12",due:"May 18",priority:"high"},
-  {list:"MoMento24-7",title:"Record episode 13",due:"May 25",priority:"high"},
-  {list:"Mindful MoMento24-7",title:"Record Mindful ep8 (overdue)",due:"Apr 20",priority:"high"},
-  {list:"Mindful MoMento24-7",title:"Record Mindful ep9 (overdue)",due:"Apr 27",priority:"high"},
-  {list:"Mindful MoMento24-7",title:"Record Mindful ep10",due:"May 4",priority:"high"},
-  {list:"Mindful MoMento24-7",title:"Record Mindful ep11",due:"May 11",priority:"high"},
-  {list:"Mindful MoMento24-7",title:"Record Mindful ep12",due:"May 18",priority:"high"},
-  {list:"Mindful MoMento24-7",title:"Record Mindful ep13",due:"May 25",priority:"high"},
-  {list:"Mindfulink",title:"Prepare tools for anxiety & emotion regulation",due:"No date",priority:"none"},
-  {list:"Mindfulink",title:"Prepare embooks support tools",due:"No date",priority:"none"},
-  {list:"Mounjaro",title:"Check weight before breakfast (Thu)",due:"May 14 · Thu",priority:"high"},
-  {list:"Mounjaro",title:"Vitamin D every Thursday",due:"Weekly",priority:"none"},
-  {list:"Home",title:"House Groceries ₹50,000",due:"No date",priority:"none"},
-  {list:"Home",title:"House Keeper ₹19,000",due:"No date",priority:"none"},
-  {list:"Home",title:"Driver ₹27,350",due:"No date",priority:"none"},
-  {list:"Home",title:"Patrol ₹24,000",due:"No date",priority:"none"},
-  {list:"Home",title:"Outing ₹20,000",due:"No date",priority:"none"},
-  {list:"Home",title:"Credit Card ₹33,000",due:"No date",priority:"none"},
-  {list:"Home",title:"SNHU ₹8,000",due:"No date",priority:"none"},
-  {list:"Home",title:"ISCA School Counselling",due:"No date",priority:"none"},
-  {list:"Home",title:"Driver Bonus ₹27,000",due:"No date",priority:"none"},
-  {list:"Home",title:"Helper Bonus ₹19,000",due:"No date",priority:"none"},
-  {list:"Subscriptions",title:"ChatGPT ₹1,900",due:"No date",priority:"none"},
-  {list:"Subscriptions",title:"Apple Music Family ₹180",due:"No date",priority:"none"},
-  {list:"Subscriptions",title:"YouTube ₹200",due:"No date",priority:"none"},
-  {list:"Subscriptions",title:"Netflix ₹500",due:"No date",priority:"none"},
-  {list:"Subscriptions",title:"iCloud Storage ₹100",due:"No date",priority:"none"},
-  {list:"Subscriptions",title:"Private VPN ₹1,650",due:"No date",priority:"none"},
-  {list:"Subscriptions",title:"Spotify ₹180",due:"No date",priority:"none"},
-  {list:"Subscriptions",title:"Shahid ₹1,900",due:"No date",priority:"none"},
-  {list:"Moe",title:"Trimmer for body shaving",due:"No date",priority:"none"},
-  {list:"Moe",title:"Anker charger for Apple devices",due:"No date",priority:"none"},
-  {list:"Inbox",title:"Prepare anxiety tools – share on LinkTree",due:"No date",priority:"none"},
-  {list:"Inbox",title:"MoMento 24-7 Season Framework (Ep14 – Compassion)",due:"No date",priority:"none"},
-  {list:"Rorito",title:"Shoes",due:"No date",priority:"none"},
-  {list:"Rorito",title:"Double Check and get clothes",due:"No date",priority:"none"},
-  {list:"Rorito",title:"Pajamas – tshirts and shorts",due:"No date",priority:"none"},
-];
-function renderReminders(){
-  const list=document.getElementById('rem-list').value;
-  const prio=document.getElementById('rem-priority').value;
-  let items=reminders;
-  if(list!=='all')items=items.filter(r=>r.list===list);
-  if(prio!=='all')items=items.filter(r=>r.priority===prio);
-  const body=document.getElementById('rem-body');
-  if(!items.length){body.innerHTML='<div class="empty">No reminders found.</div>';return;}
-  body.innerHTML=items.map(r=>`<div class="item"><div class="item-dot" style="background:${remDot(r.priority)}"></div><div class="item-content"><div class="item-title">${r.title}</div><div class="item-meta">${r.list} · ${r.due}</div></div>${r.priority!=='none'?`<span class="item-badge ${remBadge(r.priority)}">${r.priority}</span>`:''}</div>`).join('');
-}
-function remDot(p){return{high:'#f07070',medium:'#f0a05a',low:'#4f8ef7',none:'var(--border)'}[p];}
-function remBadge(p){return{high:'b-high',medium:'b-med',low:'b-low'}[p]||'b-gray';}
 
 // ── PANEL TOGGLE ──────────────────────────────────────────────────────────────
-const panelState={cal:true,mail:true,rem:true};
+const panelState={cal:true,mail:true};
 function togglePanel(id,btn){panelState[id]=!panelState[id];btn.classList.toggle('active',panelState[id]);updateGrid();}
 function updateGrid(){
   const active=Object.keys(panelState).filter(k=>panelState[k]);
   const grid=document.getElementById('main-grid');
-  ['cal','mail','rem'].forEach(id=>{const p=document.getElementById('panel-'+id);if(panelState[id])p.classList.remove('grid-hidden');else p.classList.add('grid-hidden');});
+  ['cal','mail'].forEach(id=>{const p=document.getElementById('panel-'+id);if(panelState[id])p.classList.remove('grid-hidden');else p.classList.add('grid-hidden');});
   grid.className='grid';
   if(active.length===1)grid.classList.add('one-col');
   else if(active.length===2)grid.classList.add('two-col');
@@ -458,7 +395,6 @@ function updateGrid(){
 function setTheme(name,btn){document.body.className=name==='classic'?'':'theme-'+name;document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
-renderReminders();
 </script>
 
 <!-- Google Identity Services -->
