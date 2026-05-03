@@ -6,10 +6,23 @@
 <title>moe_Schedule_summary</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0f1117;--surface:#161b27;--surface2:#1e2535;--border:#2a3347;--accent:#4f8ef7;--accent2:#6dd5b5;--accent3:#f0a05a;--text:#e8edf5;--muted:#7a8ba8;--danger:#f07070;--panel-glow:rgba(79,142,247,0.06);--header-bg:#161b27;}
-body.theme-orange{--bg:#1a0f00;--surface:#241600;--surface2:#301e00;--border:#4a3010;--accent:#ff8c00;--accent2:#ffb347;--accent3:#ff6600;--text:#fff3e0;--muted:#b08050;--danger:#ff4444;--panel-glow:rgba(255,140,0,0.07);--header-bg:#1e1100;}
-body.theme-deepblue{--bg:#06101e;--surface:#0d1e35;--surface2:#142845;--border:#1e3a5a;--accent:#1e90ff;--accent2:#00c8ff;--accent3:#3db8c8;--text:#d0e8ff;--muted:#4d7aa8;--danger:#ff6b6b;--panel-glow:rgba(30,144,255,0.08);--header-bg:#0b1a2f;}
-body.theme-lightgray{--bg:#f2f4f7;--surface:#ffffff;--surface2:#edf0f4;--border:#dce1ea;--accent:#3b72c4;--accent2:#28a87a;--accent3:#e07a20;--text:#1e2a3a;--muted:#7a8ba8;--danger:#d94040;--panel-glow:rgba(59,114,196,0.04);--header-bg:#ffffff;}
+/* ── MOE OS SIGNATURE THEME: Dark Blue + Orange ── */
+:root{
+  --bg:#070d1a;
+  --surface:#0d1829;
+  --surface2:#112038;
+  --border:#1a3050;
+  --accent:#ff8c00;
+  --accent2:#ffb347;
+  --accent3:#1e90ff;
+  --text:#f0f4ff;
+  --muted:#5a7a9a;
+  --danger:#ff5555;
+  --panel-glow:rgba(255,140,0,0.08);
+  --header-bg:#0a1525;
+  --orange:#ff8c00;
+  --blue:#1e4d8c;
+}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;transition:background .3s,color .3s;}
 .header{background:var(--header-bg);border-bottom:1px solid var(--border);padding:13px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;gap:12px;flex-wrap:wrap;}
@@ -25,10 +38,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .theme-btn{width:22px;height:22px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:transform .15s,border-color .15s;}
 .theme-btn:hover{transform:scale(1.18);}
 .theme-btn.active{border-color:var(--text);}
-.tb-classic{background:linear-gradient(135deg,#0f1117 50%,#4f8ef7 50%);}
-.tb-orange{background:linear-gradient(135deg,#1a0f00 50%,#ff8c00 50%);}
-.tb-deepblue{background:linear-gradient(135deg,#06101e 50%,#1e90ff 50%);}
-.tb-lightgray{background:linear-gradient(135deg,#f2f4f7 50%,#3b72c4 50%);border:1px solid #dce1ea;}
+.tb-signature{background:linear-gradient(135deg,#070d1a 50%,#ff8c00 50%);}
 .login-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:opacity .2s;}
 .login-btn:hover{opacity:.85;}
 .login-btn.connected{background:rgba(109,213,181,0.2);color:var(--accent2);cursor:default;}
@@ -53,8 +63,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .panel-header{display:flex;align-items:center;justify-content:space-between;padding:12px 15px 10px;border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap;}
 .panel-title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--text);}
 .panel-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
-.icon-cal{background:rgba(79,142,247,0.15);}
-.icon-mail{background:rgba(109,213,181,0.15);}
+.icon-cal{background:rgba(30,144,255,0.18);}
+.icon-mail{background:rgba(255,140,0,0.18);}
 .icon-rem{background:rgba(240,160,90,0.15);}
 .dd-wrap{position:relative;}
 select{appearance:none;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:5px 26px 5px 10px;border-radius:7px;cursor:pointer;outline:none;transition:border-color .2s;}
@@ -74,7 +84,7 @@ select:hover,select:focus{border-color:var(--accent);}
 .item-badge{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600;flex-shrink:0;margin-top:2px;white-space:nowrap;}
 .b-high{background:rgba(240,112,112,0.15);color:#f07070;}
 .b-med{background:rgba(240,160,90,0.15);color:#f0a05a;}
-.b-low{background:rgba(79,142,247,0.15);color:#4f8ef7;}
+.b-low{background:rgba(30,144,255,0.15);color:#4fa8ff;}
 .b-green{background:rgba(109,213,181,0.15);color:#6dd5b5;}
 .b-gray{background:rgba(122,139,168,0.12);color:var(--muted);}
 .empty{padding:22px 15px;text-align:center;color:var(--muted);font-size:12px;}
@@ -99,11 +109,8 @@ select:hover,select:focus{border-color:var(--accent);}
     <div class="date-pill" id="live-date"><strong>Loading...</strong></div>
     <button class="login-btn" id="auth-btn" onclick="handleAuth()">🔐 Connect Google</button>
     <div class="theme-switcher">
-      <span class="theme-label">Theme:</span>
-      <div class="theme-btn tb-classic active" title="Classic Dark" onclick="setTheme('classic',this)"></div>
-      <div class="theme-btn tb-orange" title="Full Orange" onclick="setTheme('orange',this)"></div>
-      <div class="theme-btn tb-deepblue" title="Deep Blue" onclick="setTheme('deepblue',this)"></div>
-      <div class="theme-btn tb-lightgray" title="Light Gray" onclick="setTheme('lightgray',this)"></div>
+      <div class="theme-btn tb-signature active" title="Moe OS Signature" style="pointer-events:none;"></div>
+      <span class="theme-label" style="color:var(--accent);font-weight:600;font-size:11px;">Moe OS</span>
     </div>
   </div>
 </div>
@@ -114,8 +121,8 @@ select:hover,select:focus{border-color:var(--accent);}
 </div>
 
 <div class="stats-row">
-  <div class="stat-card"><div class="stat-icon" style="background:rgba(79,142,247,0.12)">📅</div><div><div class="stat-val" id="stat-cal">—</div><div class="stat-label">Events this week</div></div></div>
-  <div class="stat-card"><div class="stat-icon" style="background:rgba(109,213,181,0.12)">✉️</div><div><div class="stat-val" id="stat-mail">—</div><div class="stat-label">Emails · <span id="stat-unread" style="color:var(--accent)"></span></div></div></div>
+  <div class="stat-card"><div class="stat-icon" style="background:rgba(30,144,255,0.15)">📅</div><div><div class="stat-val" id="stat-cal">—</div><div class="stat-label">Events this week</div></div></div>
+  <div class="stat-card"><div class="stat-icon" style="background:rgba(255,140,0,0.15)">✉️</div><div><div class="stat-val" id="stat-mail">—</div><div class="stat-label">Emails · <span id="stat-unread" style="color:var(--accent)"></span></div></div></div>
 </div>
 
 <div class="grid" id="main-grid">
