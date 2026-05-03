@@ -310,12 +310,48 @@ function formatEventDate(start) {
   return d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', hour: start.dateTime ? '2-digit' : undefined, minute: start.dateTime ? '2-digit' : undefined });
 }
 
+const CAT_COLORS = {
+  'Health':   '#00c896',
+  'ISCA':     '#ff6b6b',
+  'ISCA 906': '#f5c400',
+  'PSY-636':  '#a855f7',
+  'PSY-614':  '#3b9eff',
+  'PSY-612':  '#22c55e',
+  'Birthdays':'#f07070',
+};
+
+function detectCategory(title) {
+  if (!title) return null;
+  const t = title.toUpperCase();
+  if (t.includes('PSY-612')) return 'PSY-612';
+  if (t.includes('PSY-614')) return 'PSY-614';
+  if (t.includes('PSY-636')) return 'PSY-636';
+  if (t.includes('ISCA 906') || t.includes('ISCA906') || t.includes('907') || t.includes('906-') || t.includes('906')) return 'ISCA 906';
+  if (t.includes('ISCA') || t.includes('102')) return 'ISCA';
+  if (t.includes('MOUNJARO') || t.includes('WEIGHT') || t.includes('VITAMIN') || t.includes('DOCTOR') || t.includes('HEALTH')) return 'Health';
+  return null;
+}
+
 function filterCalendar() {
-  const src = document.getElementById('cal-src').value;
+  const cat = document.getElementById('cal-cat').value;
   let items = allCalEvents;
-  if (src !== 'all') items = items.filter(e => src === 'Birthdays' ? e.src === 'Birthdays' : e.src !== 'Birthdays');
+  if (cat === 'Birthdays') items = items.filter(e => e.src === 'Birthdays');
+  else if (cat !== 'all') items = items.filter(e => detectCategory(e.title) === cat);
   const body = document.getElementById('cal-body');
   if (!items.length) { body.innerHTML = '<div class="empty">No events found.</div>'; return; }
+  body.innerHTML = items.map(e => {
+    const detectedCat = e.src === 'Birthdays' ? 'Birthdays' : detectCategory(e.title);
+    const color = CAT_COLORS[detectedCat] || '#ff8c00';
+    const catLabel = detectedCat || '';
+    return \`<div class="item">
+      <div class="item-dot" style="background:\${color}"></div>
+      <div class="item-content">
+        <div class="item-title">\${e.title}</div>
+        <div class="item-meta">\${e.date}\${catLabel ? \` <span class="src-tag" style="background:\${color}22;color:\${color}">\${catLabel}</span>\` : ''}</div>
+      </div>
+    </div>\`;
+  }).join('');
+}
   body.innerHTML = items.map(e => `
     <div class="item">
       <div class="item-dot" style="background:${e.color}"></div>
