@@ -6,25 +6,14 @@
 <title>moe_Schedule_summary</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
-/* ── MOE OS SIGNATURE THEME: Dark Blue + Orange ── */
 :root{
-  --bg:#070d1a;
-  --surface:#0d1829;
-  --surface2:#112038;
-  --border:#1a3050;
-  --accent:#ff8c00;
-  --accent2:#ffb347;
-  --accent3:#1e90ff;
-  --text:#f0f4ff;
-  --muted:#5a7a9a;
-  --danger:#ff5555;
-  --panel-glow:rgba(255,140,0,0.08);
-  --header-bg:#0a1525;
-  --orange:#ff8c00;
-  --blue:#1e4d8c;
+  --bg:#070d1a;--surface:#0d1829;--surface2:#112038;--border:#1a3050;
+  --accent:#ff8c00;--accent2:#ffb347;--accent3:#1e90ff;
+  --text:#f0f4ff;--muted:#5a7a9a;--danger:#ff5555;
+  --panel-glow:rgba(255,140,0,0.08);--header-bg:#0a1525;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;transition:background .3s,color .3s;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
 .header{background:var(--header-bg);border-bottom:1px solid var(--border);padding:13px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;gap:12px;flex-wrap:wrap;}
 .header-left{display:flex;align-items:center;gap:10px;}
 .logo{font-family:'DM Serif Display',serif;font-size:21px;color:var(--accent);letter-spacing:-0.5px;}
@@ -33,29 +22,24 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 .date-pill{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 13px;font-size:11px;color:var(--muted);}
 .date-pill strong{color:var(--text);}
-.theme-switcher{display:flex;align-items:center;gap:6px;}
-.theme-label{font-size:11px;color:var(--muted);}
-.theme-btn{width:22px;height:22px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:transform .15s,border-color .15s;}
-.theme-btn:hover{transform:scale(1.18);}
-.theme-btn.active{border-color:var(--text);}
-.tb-signature{background:linear-gradient(135deg,#070d1a 50%,#ff8c00 50%);}
-.login-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:opacity .2s;}
+.moe-badge{display:flex;align-items:center;gap:6px;}
+.moe-dot{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#070d1a 50%,#ff8c00 50%);border:2px solid var(--accent);}
+.moe-label{color:var(--accent);font-weight:600;font-size:11px;}
+.login-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .2s;}
 .login-btn:hover{opacity:.85;}
-.login-btn.connected{background:rgba(109,213,181,0.2);color:var(--accent2);cursor:default;}
+.login-btn.connected{background:rgba(30,144,255,0.2);color:#4fa8ff;cursor:default;}
 .selector-bar{display:flex;align-items:center;gap:8px;padding:14px 22px 0;max-width:1420px;margin:0 auto;flex-wrap:wrap;}
 .sel-tab{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:7px 14px;font-size:12px;font-weight:500;cursor:pointer;color:var(--muted);transition:all .2s;user-select:none;}
 .sel-tab:hover{border-color:var(--accent);color:var(--text);}
 .sel-tab.active{background:var(--accent);border-color:var(--accent);color:#fff;}
-.stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:14px 22px;max-width:1420px;margin:0 auto;}
-@media(max-width:820px){.stats-row{grid-template-columns:repeat(2,1fr);}}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 16px;display:flex;align-items:center;gap:12px;transition:background .3s;}
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px 22px;max-width:1420px;margin:0 auto;}
+@media(max-width:600px){.stats-row{grid-template-columns:1fr;}}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 16px;display:flex;align-items:center;gap:12px;}
 .stat-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
 .stat-val{font-size:22px;font-weight:600;color:var(--text);line-height:1;}
 .stat-label{font-size:11px;color:var(--muted);margin-top:2px;}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:0 22px 22px;max-width:1420px;margin:0 auto;}
-@media(max-width:1100px){.grid{grid-template-columns:1fr 1fr;}}
-@media(max-width:680px){.grid{grid-template-columns:1fr;padding:0 12px 16px;}}
-.grid.two-col{grid-template-columns:1fr 1fr;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0 22px 22px;max-width:1420px;margin:0 auto;}
+@media(max-width:780px){.grid{grid-template-columns:1fr;padding:0 12px 16px;}}
 .grid.one-col{grid-template-columns:1fr;}
 .grid-hidden{display:none;}
 .panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 24px var(--panel-glow);animation:fadeUp .3s ease both;}
@@ -65,15 +49,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .panel-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
 .icon-cal{background:rgba(30,144,255,0.18);}
 .icon-mail{background:rgba(255,140,0,0.18);}
-.icon-rem{background:rgba(240,160,90,0.15);}
 .dd-wrap{position:relative;}
 select{appearance:none;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:5px 26px 5px 10px;border-radius:7px;cursor:pointer;outline:none;transition:border-color .2s;}
 select:hover,select:focus{border-color:var(--accent);}
 .dd-wrap::after{content:'▾';position:absolute;right:8px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:10px;pointer-events:none;}
-.panel-body{padding:6px 0;flex:1;overflow-y:auto;max-height:460px;}
+.panel-body{padding:6px 0;flex:1;overflow-y:auto;max-height:500px;}
 .panel-body::-webkit-scrollbar{width:4px;}
 .panel-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
-.item{padding:9px 15px;border-bottom:1px solid rgba(42,51,71,0.4);display:flex;align-items:flex-start;gap:9px;transition:background .15s;cursor:default;}
+.item{padding:9px 15px;border-bottom:1px solid rgba(26,48,80,0.6);display:flex;align-items:flex-start;gap:9px;transition:background .15s;cursor:default;}
 .item:hover{background:var(--surface2);}
 .item:last-child{border-bottom:none;}
 .item-dot{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0;}
@@ -81,24 +64,18 @@ select:hover,select:focus{border-color:var(--accent);}
 .item-title{font-size:13px;font-weight:500;color:var(--text);line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .item-meta{font-size:11px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .item-snippet{font-size:11px;color:var(--muted);margin-top:3px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
-.item-badge{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600;flex-shrink:0;margin-top:2px;white-space:nowrap;}
-.b-high{background:rgba(240,112,112,0.15);color:#f07070;}
-.b-med{background:rgba(240,160,90,0.15);color:#f0a05a;}
-.b-low{background:rgba(30,144,255,0.15);color:#4fa8ff;}
-.b-green{background:rgba(109,213,181,0.15);color:#6dd5b5;}
-.b-gray{background:rgba(122,139,168,0.12);color:var(--muted);}
+.cat-tag{font-size:9px;padding:1px 6px;border-radius:4px;font-weight:600;margin-left:4px;vertical-align:middle;}
 .empty{padding:22px 15px;text-align:center;color:var(--muted);font-size:12px;}
 .loading{padding:22px 15px;text-align:center;color:var(--muted);font-size:12px;animation:pulse 1.5s infinite;}
 @keyframes pulse{0%,100%{opacity:.5;}50%{opacity:1;}}
 .refresh-btn{background:none;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:3px 8px;font-size:11px;cursor:pointer;transition:all .2s;}
 .refresh-btn:hover{border-color:var(--accent);color:var(--accent);}
-.src-tag{font-size:9px;padding:1px 5px;border-radius:4px;font-weight:600;opacity:.75;margin-left:4px;vertical-align:middle;background:rgba(122,139,168,.12);color:var(--muted);}
 .signin-prompt{padding:30px 20px;text-align:center;}
 .signin-prompt p{color:var(--muted);font-size:12px;margin-bottom:14px;line-height:1.6;}
 .signin-prompt button{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 20px;font-size:13px;font-weight:600;cursor:pointer;}
 </style>
 </head>
-<body class="theme-classic">
+<body>
 
 <div class="header">
   <div class="header-left">
@@ -108,21 +85,27 @@ select:hover,select:focus{border-color:var(--accent);}
   <div class="header-right">
     <div class="date-pill" id="live-date"><strong>Loading...</strong></div>
     <button class="login-btn" id="auth-btn" onclick="handleAuth()">🔐 Connect Google</button>
-    <div class="theme-switcher">
-      <div class="theme-btn tb-signature active" title="Moe OS Signature" style="pointer-events:none;"></div>
-      <span class="theme-label" style="color:var(--accent);font-weight:600;font-size:11px;">Moe OS</span>
+    <div class="moe-badge">
+      <div class="moe-dot"></div>
+      <span class="moe-label">Moe OS</span>
     </div>
   </div>
 </div>
 
 <div class="selector-bar">
-  <div class="sel-tab active" onclick="togglePanel('cal',this)"><span>📅</span> Calendar</div>
-  <div class="sel-tab active" onclick="togglePanel('mail',this)"><span>✉️</span> Gmail</div>
+  <div class="sel-tab active" onclick="togglePanel('cal',this)">📅 Calendar</div>
+  <div class="sel-tab active" onclick="togglePanel('mail',this)">✉️ Gmail</div>
 </div>
 
 <div class="stats-row">
-  <div class="stat-card"><div class="stat-icon" style="background:rgba(30,144,255,0.15)">📅</div><div><div class="stat-val" id="stat-cal">—</div><div class="stat-label">Events this week</div></div></div>
-  <div class="stat-card"><div class="stat-icon" style="background:rgba(255,140,0,0.15)">✉️</div><div><div class="stat-val" id="stat-mail">—</div><div class="stat-label">Emails · <span id="stat-unread" style="color:var(--accent)"></span></div></div></div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background:rgba(30,144,255,0.15)">📅</div>
+    <div><div class="stat-val" id="stat-cal">—</div><div class="stat-label">Events</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background:rgba(255,140,0,0.15)">✉️</div>
+    <div><div class="stat-val" id="stat-mail">—</div><div class="stat-label">Unread emails</div></div>
+  </div>
 </div>
 
 <div class="grid" id="main-grid">
@@ -154,71 +137,40 @@ select:hover,select:focus{border-color:var(--accent);}
       </div>
       <button class="refresh-btn" onclick="loadCalendar()">↻</button>
     </div>
-    <div class="panel-body" id="cal-body"><div class="signin-prompt"><p>Connect Google to see your live calendar events.</p><button onclick="handleAuth()">🔐 Connect Google</button></div></div>
+    <div class="panel-body" id="cal-body">
+      <div class="signin-prompt"><p>Connect Google to see your live calendar events.</p><button onclick="handleAuth()">🔐 Connect Google</button></div>
+    </div>
   </div>
 
   <!-- GMAIL -->
   <div class="panel" id="panel-mail">
     <div class="panel-header">
-      <div class="panel-title"><div class="panel-icon icon-mail">✉️</div>Gmail <span style="font-size:10px;background:rgba(240,112,112,0.15);color:#f07070;padding:2px 7px;border-radius:20px;margin-left:4px;font-weight:600;">UNREAD ONLY</span></div>
+      <div class="panel-title">
+        <div class="panel-icon icon-mail">✉️</div>Gmail
+        <span style="font-size:10px;background:rgba(255,85,85,0.15);color:#ff5555;padding:2px 7px;border-radius:20px;margin-left:4px;font-weight:600;">UNREAD ONLY</span>
+      </div>
       <button class="refresh-btn" onclick="loadMail()">↻</button>
     </div>
-    <div class="panel-body" id="mail-body"><div class="signin-prompt"><p>Connect Google to see your unread emails.</p><button onclick="handleAuth()">🔐 Connect Google</button></div></div>
-  </div>
-
-  <!-- REMINDERS (static - no Apple API) -->
-  <div class="panel" id="panel-rem">
-    <div class="panel-header">
-      <div class="panel-title"><div class="panel-icon icon-rem">🔔</div>Reminders</div>
-      <div class="dd-wrap">
-        <select id="rem-list" onchange="renderReminders()">
-          <option value="all">All Lists</option>
-          <option value="Morning Alignments">Morning</option>
-          <option value="SNHU">SNHU</option>
-          <option value="MoMento24-7">MoMento</option>
-          <option value="Mindful MoMento24-7">Mindful MoMento</option>
-          <option value="Mindfulink">Mindfulink</option>
-          <option value="Mounjaro">Mounjaro</option>
-          <option value="Home">Home</option>
-          <option value="Subscriptions">Subscriptions</option>
-          <option value="Moe">Personal</option>
-          <option value="Inbox">Inbox</option>
-          <option value="Rorito">Rorito</option>
-        </select>
-      </div>
-      <div class="dd-wrap">
-        <select id="rem-priority" onchange="renderReminders()">
-          <option value="all">All Priority</option>
-          <option value="high">High</option>
-          <option value="medium">Medium</option>
-          <option value="none">No Priority</option>
-        </select>
-      </div>
+    <div class="panel-body" id="mail-body">
+      <div class="signin-prompt"><p>Connect Google to see your unread emails.</p><button onclick="handleAuth()">🔐 Connect Google</button></div>
     </div>
-    <div class="panel-body" id="rem-body"></div>
   </div>
 
 </div>
 
 <script>
-// ── CONFIG ────────────────────────────────────────────────────────────────────
 const CLIENT_ID = '544721145395-pstlvshniq00gv5lgdav97nksikh1nim.apps.googleusercontent.com';
 const SCOPES = 'https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/gmail.readonly';
+let tokenClient, accessToken = null, allCalEvents = [];
 
-let tokenClient;
-let accessToken = null;
-let allCalEvents = [];
-let allEmails = [];
-
-// ── DATE ─────────────────────────────────────────────────────────────────────
+// Date
 function updateDate() {
   const now = new Date();
-  const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
-  document.getElementById('live-date').innerHTML = `<strong>${now.toLocaleDateString('en-US', opts)}</strong> &nbsp;·&nbsp; Mumbai, India`;
+  document.getElementById('live-date').innerHTML = `<strong>${now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</strong> &nbsp;·&nbsp; Mumbai, India`;
 }
 updateDate();
 
-// ── GOOGLE IDENTITY ───────────────────────────────────────────────────────────
+// Auth
 function initGoogleAuth() {
   tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: CLIENT_ID,
@@ -233,70 +185,61 @@ function initGoogleAuth() {
     }
   });
 }
-
 function handleAuth() {
   if (accessToken) return;
   tokenClient.requestAccessToken({ prompt: 'consent' });
 }
 
-// ── CALENDAR ──────────────────────────────────────────────────────────────────
+// Calendar
+const CAT_COLORS = {
+  'Health':'#00c896','ISCA':'#ff6b6b','ISCA 906':'#f5c400',
+  'PSY-636':'#a855f7','PSY-614':'#3b9eff','PSY-612':'#22c55e','Birthdays':'#f07070'
+};
+
+function detectCategory(title) {
+  if (!title) return null;
+  const t = title.toUpperCase();
+  if (t.includes('PSY-612')) return 'PSY-612';
+  if (t.includes('PSY-614')) return 'PSY-614';
+  if (t.includes('PSY-636')) return 'PSY-636';
+  if (t.includes('906') || t.includes('907')) return 'ISCA 906';
+  if (t.includes('ISCA') || t.includes('102-01')) return 'ISCA';
+  if (t.includes('MOUNJARO') || t.includes('WEIGHT') || t.includes('VITAMIN') || t.includes('DOCTOR')) return 'Health';
+  return null;
+}
+
 async function loadCalendar() {
   if (!accessToken) return;
   document.getElementById('cal-body').innerHTML = '<div class="loading">Loading calendar...</div>';
   const range = document.getElementById('cal-range').value;
-
   const now = new Date();
-  let timeMin, timeMax;
-
-  // Build date boundaries in local time, then convert to ISO properly
   const y = now.getFullYear(), mo = now.getMonth(), d = now.getDate();
-
+  let timeMin, timeMax;
   if (range === 'today') {
-    timeMin = new Date(y, mo, d, 0, 0, 0, 0);
-    timeMax = new Date(y, mo, d, 23, 59, 59, 999);
+    timeMin = new Date(y,mo,d,0,0,0,0); timeMax = new Date(y,mo,d,23,59,59,999);
   } else if (range === 'week') {
-    timeMin = new Date(y, mo, d, 0, 0, 0, 0);
-    timeMax = new Date(y, mo, d + 7, 23, 59, 59, 999);
+    timeMin = new Date(y,mo,d,0,0,0,0); timeMax = new Date(y,mo,d+7,23,59,59,999);
   } else if (range === 'weekend') {
-    const day = now.getDay(); // 0=Sun,6=Sat,5=Fri
-    // Find coming Friday (if today is Fri/Sat/Sun use this weekend)
-    let daysToFri;
-    if (day === 5) daysToFri = 0;
-    else if (day === 6) daysToFri = -1;
-    else if (day === 0) daysToFri = -2;
-    else daysToFri = 5 - day;
-    timeMin = new Date(y, mo, d + daysToFri, 0, 0, 0, 0);
-    timeMax = new Date(y, mo, d + daysToFri + 2, 23, 59, 59, 999);
+    const day = now.getDay();
+    const dF = day===5?0:day===6?-1:day===0?-2:5-day;
+    timeMin = new Date(y,mo,d+dF,0,0,0,0); timeMax = new Date(y,mo,d+dF+2,23,59,59,999);
   } else {
-    timeMin = new Date(y, mo, d, 0, 0, 0, 0);
-    timeMax = new Date(y, mo, d + parseInt(range), 23, 59, 59, 999);
+    timeMin = new Date(y,mo,d,0,0,0,0); timeMax = new Date(y,mo,d+parseInt(range),23,59,59,999);
   }
-
-  const url = `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${timeMin.toISOString()}&timeMax=${timeMax.toISOString()}&singleEvents=true&orderBy=startTime&maxResults=50`;
-
   try {
-    const resp = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
+    const resp = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${timeMin.toISOString()}&timeMax=${timeMax.toISOString()}&singleEvents=true&orderBy=startTime&maxResults=50`,{headers:{Authorization:`Bearer ${accessToken}`}});
     const data = await resp.json();
-    allCalEvents = (data.items || []).map(e => ({
-      title: e.summary || '(No title)',
-      date: formatEventDate(e.start),
-      src: 'My Calendar',
-      color: '#4f8ef7'
-    }));
-
-    // Also fetch birthdays calendar
+    allCalEvents = (data.items||[]).map(e=>({title:e.summary||'(No title)',date:formatEventDate(e.start),src:'My Calendar'}));
     try {
-      const bResp = await fetch(`https://www.googleapis.com/calendar/v3/calendarList`, { headers: { Authorization: `Bearer ${accessToken}` } });
+      const bResp = await fetch('https://www.googleapis.com/calendar/v3/calendarList',{headers:{Authorization:`Bearer ${accessToken}`}});
       const bData = await bResp.json();
-      const birthdayCal = (bData.items || []).find(c => c.summary === 'Birthdays' || c.id.includes('contacts#contacts'));
-      if (birthdayCal) {
-        const bEvResp = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(birthdayCal.id)}/events?timeMin=${timeMin.toISOString()}&timeMax=${timeMax.toISOString()}&singleEvents=true&orderBy=startTime&maxResults=20`, { headers: { Authorization: `Bearer ${accessToken}` } });
-        const bEvData = await bEvResp.json();
-        const bEvents = (bEvData.items || []).map(e => ({ title: e.summary || '(No title)', date: formatEventDate(e.start), src: 'Birthdays', color: '#f07070' }));
-        allCalEvents = [...allCalEvents, ...bEvents];
+      const bCal = (bData.items||[]).find(c=>c.summary==='Birthdays'||c.id.includes('contacts#contacts'));
+      if (bCal) {
+        const bEv = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(bCal.id)}/events?timeMin=${timeMin.toISOString()}&timeMax=${timeMax.toISOString()}&singleEvents=true&orderBy=startTime&maxResults=20`,{headers:{Authorization:`Bearer ${accessToken}`}});
+        const bEvData = await bEv.json();
+        (bEvData.items||[]).forEach(e=>allCalEvents.push({title:e.summary||'(No title)',date:formatEventDate(e.start),src:'Birthdays'}));
       }
-    } catch(e) {}
-
+    } catch(e){}
     document.getElementById('stat-cal').textContent = allCalEvents.length;
     filterCalendar();
   } catch(e) {
@@ -306,30 +249,8 @@ async function loadCalendar() {
 
 function formatEventDate(start) {
   if (!start) return '';
-  const d = new Date(start.dateTime || start.date);
-  return d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', hour: start.dateTime ? '2-digit' : undefined, minute: start.dateTime ? '2-digit' : undefined });
-}
-
-const CAT_COLORS = {
-  'Health':   '#00c896',
-  'ISCA':     '#ff6b6b',
-  'ISCA 906': '#f5c400',
-  'PSY-636':  '#a855f7',
-  'PSY-614':  '#3b9eff',
-  'PSY-612':  '#22c55e',
-  'Birthdays':'#f07070',
-};
-
-function detectCategory(title) {
-  if (!title) return null;
-  const t = title.toUpperCase();
-  if (t.includes('PSY-612')) return 'PSY-612';
-  if (t.includes('PSY-614')) return 'PSY-614';
-  if (t.includes('PSY-636')) return 'PSY-636';
-  if (t.includes('ISCA 906') || t.includes('ISCA906') || t.includes('907') || t.includes('906-') || t.includes('906')) return 'ISCA 906';
-  if (t.includes('ISCA') || t.includes('102')) return 'ISCA';
-  if (t.includes('MOUNJARO') || t.includes('WEIGHT') || t.includes('VITAMIN') || t.includes('DOCTOR') || t.includes('HEALTH')) return 'Health';
-  return null;
+  const d = new Date(start.dateTime||start.date);
+  return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',...(start.dateTime?{hour:'2-digit',minute:'2-digit'}:{})});
 }
 
 function filterCalendar() {
@@ -340,69 +261,41 @@ function filterCalendar() {
   const body = document.getElementById('cal-body');
   if (!items.length) { body.innerHTML = '<div class="empty">No events found.</div>'; return; }
   body.innerHTML = items.map(e => {
-    const detectedCat = e.src === 'Birthdays' ? 'Birthdays' : detectCategory(e.title);
-    const color = CAT_COLORS[detectedCat] || '#ff8c00';
-    const catLabel = detectedCat || '';
-    return \`<div class="item">
-      <div class="item-dot" style="background:\${color}"></div>
-      <div class="item-content">
-        <div class="item-title">\${e.title}</div>
-        <div class="item-meta">\${e.date}\${catLabel ? \` <span class="src-tag" style="background:\${color}22;color:\${color}">\${catLabel}</span>\` : ''}</div>
-      </div>
-    </div>\`;
-  }).join('');
-}
-  body.innerHTML = items.map(e => `
-    <div class="item">
-      <div class="item-dot" style="background:${e.color}"></div>
+    const c = e.src === 'Birthdays' ? 'Birthdays' : detectCategory(e.title);
+    const color = CAT_COLORS[c] || '#ff8c00';
+    return `<div class="item">
+      <div class="item-dot" style="background:${color}"></div>
       <div class="item-content">
         <div class="item-title">${e.title}</div>
-        <div class="item-meta">${e.date} <span class="src-tag">${e.src}</span></div>
+        <div class="item-meta">${e.date}${c?` <span class="cat-tag" style="background:${color}22;color:${color}">${c}</span>`:''}</div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
-// ── GMAIL (unread only) ───────────────────────────────────────────────────────
+// Gmail
 async function loadMail() {
   if (!accessToken) return;
   document.getElementById('mail-body').innerHTML = '<div class="loading">Loading unread emails...</div>';
-
   try {
-    const resp = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=25&labelIds=INBOX&labelIds=UNREAD', {
-      headers: { Authorization: `Bearer ${accessToken}` }
-    });
+    const resp = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=25&labelIds=INBOX&labelIds=UNREAD',{headers:{Authorization:`Bearer ${accessToken}`}});
     const data = await resp.json();
-    const messages = data.messages || [];
-
+    const messages = data.messages||[];
     if (!messages.length) {
-      document.getElementById('stat-mail').textContent = '0';
-      document.getElementById('stat-unread').textContent = '';
-      document.getElementById('mail-body').innerHTML = '<div class="empty">🎉 No unread emails!</div>';
+      document.getElementById('stat-mail').textContent='0';
+      document.getElementById('mail-body').innerHTML='<div class="empty">🎉 No unread emails!</div>';
       return;
     }
-
-    const details = await Promise.all(messages.slice(0, 20).map(m =>
-      fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${m.id}?format=metadata&metadataHeaders=Subject&metadataHeaders=From&metadataHeaders=Date`, {
-        headers: { Authorization: `Bearer ${accessToken}` }
-      }).then(r => r.json())
+    const details = await Promise.all(messages.slice(0,20).map(m=>
+      fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${m.id}?format=metadata&metadataHeaders=Subject&metadataHeaders=From&metadataHeaders=Date`,{headers:{Authorization:`Bearer ${accessToken}`}}).then(r=>r.json())
     ));
-
-    allEmails = details.map(m => {
-      const headers = m.payload?.headers || [];
-      const get = name => (headers.find(h => h.name === name) || {}).value || '';
-      return {
-        subject: get('Subject') || '(No subject)',
-        sender: get('From').replace(/<.*>/, '').trim(),
-        date: formatMailDate(get('Date')),
-        snippet: m.snippet || ''
-      };
+    const emails = details.map(m=>{
+      const h=m.payload?.headers||[];
+      const get=n=>(h.find(x=>x.name===n)||{}).value||'';
+      return{subject:get('Subject')||'(No subject)',sender:get('From').replace(/<.*>/,'').trim(),date:formatMailDate(get('Date')),snippet:m.snippet||''};
     });
-
-    document.getElementById('stat-mail').textContent = allEmails.length;
-    document.getElementById('stat-unread').textContent = `${allEmails.length} unread`;
-
-    const body = document.getElementById('mail-body');
-    body.innerHTML = allEmails.map(e => `
+    document.getElementById('stat-mail').textContent=emails.length;
+    document.getElementById('mail-body').innerHTML=emails.map(e=>`
       <div class="item" style="border-left:3px solid var(--accent);padding-left:12px;">
         <div class="item-dot" style="background:var(--accent)"></div>
         <div class="item-content">
@@ -412,40 +305,25 @@ async function loadMail() {
         </div>
       </div>`).join('');
   } catch(e) {
-    document.getElementById('mail-body').innerHTML = '<div class="empty">Error loading emails.</div>';
+    document.getElementById('mail-body').innerHTML='<div class="empty">Error loading emails.</div>';
   }
 }
 
-function formatMailDate(dateStr) {
-  if (!dateStr) return '';
-  try {
-    const d = new Date(dateStr);
-    const today = new Date();
-    if (d.toDateString() === today.toDateString()) return 'Today ' + d.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
-    return d.toLocaleDateString('en-US', { month:'short', day:'numeric' });
-  } catch(e) { return dateStr; }
+function formatMailDate(s) {
+  if(!s)return'';
+  try{const d=new Date(s),t=new Date();if(d.toDateString()===t.toDateString())return'Today '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});}catch(e){return s;}
 }
 
-
-// ── PANEL TOGGLE ──────────────────────────────────────────────────────────────
+// Panel toggle
 const panelState={cal:true,mail:true};
-function togglePanel(id,btn){panelState[id]=!panelState[id];btn.classList.toggle('active',panelState[id]);updateGrid();}
-function updateGrid(){
-  const active=Object.keys(panelState).filter(k=>panelState[k]);
-  const grid=document.getElementById('main-grid');
-  ['cal','mail'].forEach(id=>{const p=document.getElementById('panel-'+id);if(panelState[id])p.classList.remove('grid-hidden');else p.classList.add('grid-hidden');});
-  grid.className='grid';
-  if(active.length===1)grid.classList.add('one-col');
-  else if(active.length===2)grid.classList.add('two-col');
+function togglePanel(id,btn){
+  panelState[id]=!panelState[id];
+  btn.classList.toggle('active',panelState[id]);
+  document.getElementById('panel-'+id).classList.toggle('grid-hidden',!panelState[id]);
+  const active=Object.values(panelState).filter(Boolean).length;
+  document.getElementById('main-grid').className='grid'+(active===1?' one-col':'');
 }
-
-// ── THEME ─────────────────────────────────────────────────────────────────────
-function setTheme(name,btn){document.body.className=name==='classic'?'':'theme-'+name;document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
-
-// ── INIT ──────────────────────────────────────────────────────────────────────
 </script>
-
-<!-- Google Identity Services -->
 <script src="https://accounts.google.com/gsi/client" onload="initGoogleAuth()"></script>
 </body>
 </html>
