@@ -124,7 +124,6 @@ select:hover,select:focus{border-color:var(--accent);}
       <div class="dd-wrap">
         <select id="cal-cat" onchange="filterCalendar()">
           <option value="all">All Categories</option>
-          <option value="Health">⚪ Health</option>
           <option value="ISCA">🔴 ISCA</option>
           <option value="ISCA 906">🟡 ISCA 906</option>
           <option value="PSY-636">🟣 PSY-636</option>
@@ -199,7 +198,7 @@ function handleAuth() {
 
 // Calendar
 const CAT_COLORS = {
-  'Health':'#00c896','ISCA':'#ff6b6b','ISCA 906':'#f5c400',
+  'ISCA':'#ff6b6b','ISCA 906':'#f5c400',
   'PSY-636':'#a855f7','PSY-614':'#3b9eff','PSY-612':'#22c55e','Birthdays':'#f07070'
 };
 
@@ -211,7 +210,6 @@ function detectCategory(title) {
   if (t.includes('PSY-636')) return 'PSY-636';
   if (t.includes('906') || t.includes('907')) return 'ISCA 906';
   if (t.includes('ISCA') || t.includes('102-01')) return 'ISCA';
-  if (t.includes('MOUNJARO') || t.includes('WEIGHT') || t.includes('VITAMIN') || t.includes('DOCTOR')) return 'Health';
   return null;
 }
 
