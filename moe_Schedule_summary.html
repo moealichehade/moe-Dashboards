@@ -132,10 +132,15 @@ select:hover,select:focus{border-color:var(--accent);}
     <div class="panel-header">
       <div class="panel-title"><div class="panel-icon icon-cal">📅</div>Calendar</div>
       <div class="dd-wrap">
-        <select id="cal-src" onchange="filterCalendar()">
-          <option value="all">All Calendars</option>
-          <option value="primary">My Calendar</option>
-          <option value="Birthdays">Birthdays</option>
+        <select id="cal-cat" onchange="filterCalendar()">
+          <option value="all">All Categories</option>
+          <option value="Health">🟢 Health</option>
+          <option value="ISCA">🔴 ISCA</option>
+          <option value="ISCA 906">🟡 ISCA 906</option>
+          <option value="PSY-636">🟣 PSY-636</option>
+          <option value="PSY-614">🔵 PSY-614</option>
+          <option value="PSY-612">🟩 PSY-612</option>
+          <option value="Birthdays">🎂 Birthdays</option>
         </select>
       </div>
       <div class="dd-wrap">
