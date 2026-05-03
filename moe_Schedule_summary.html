@@ -238,21 +238,28 @@ async function loadCalendar() {
   const now = new Date();
   let timeMin, timeMax;
 
+  // Build date boundaries in local time, then convert to ISO properly
+  const y = now.getFullYear(), mo = now.getMonth(), d = now.getDate();
+
   if (range === 'today') {
-    timeMin = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
-    timeMax = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+    timeMin = new Date(y, mo, d, 0, 0, 0, 0);
+    timeMax = new Date(y, mo, d, 23, 59, 59, 999);
   } else if (range === 'week') {
-    timeMin = now;
-    timeMax = new Date(now); timeMax.setDate(timeMax.getDate() + 7);
+    timeMin = new Date(y, mo, d, 0, 0, 0, 0);
+    timeMax = new Date(y, mo, d + 7, 23, 59, 59, 999);
   } else if (range === 'weekend') {
-    // find next Friday
-    const day = now.getDay(); // 0=Sun,1=Mon,...,5=Fri,6=Sat
-    const daysToFri = day <= 5 ? 5 - day : 6;
-    timeMin = new Date(now.getFullYear(), now.getMonth(), now.getDate() + daysToFri, 0, 0, 0);
-    timeMax = new Date(now.getFullYear(), now.getMonth(), now.getDate() + daysToFri + 2, 23, 59, 59);
+    const day = now.getDay(); // 0=Sun,6=Sat,5=Fri
+    // Find coming Friday (if today is Fri/Sat/Sun use this weekend)
+    let daysToFri;
+    if (day === 5) daysToFri = 0;
+    else if (day === 6) daysToFri = -1;
+    else if (day === 0) daysToFri = -2;
+    else daysToFri = 5 - day;
+    timeMin = new Date(y, mo, d + daysToFri, 0, 0, 0, 0);
+    timeMax = new Date(y, mo, d + daysToFri + 2, 23, 59, 59, 999);
   } else {
-    timeMin = now;
-    timeMax = new Date(now); timeMax.setDate(timeMax.getDate() + parseInt(range));
+    timeMin = new Date(y, mo, d, 0, 0, 0, 0);
+    timeMax = new Date(y, mo, d + parseInt(range), 23, 59, 59, 999);
   }
 
   const url = `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${timeMin.toISOString()}&timeMax=${timeMax.toISOString()}&singleEvents=true&orderBy=startTime&maxResults=50`;
