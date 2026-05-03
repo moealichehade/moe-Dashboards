@@ -16,6 +16,8 @@
 body.theme-classic{--bg:#0f1117;--surface:#161b27;--surface2:#1e2535;--border:#2a3347;--accent:#4f8ef7;--accent2:#6dd5b5;--text:#e8edf5;--muted:#7a8ba8;--panel-glow:rgba(79,142,247,0.06);--header-bg:#161b27;}
 body.theme-orange{--bg:#1a0f00;--surface:#241600;--surface2:#301e00;--border:#4a3010;--accent:#ff8c00;--accent2:#ffb347;--text:#fff3e0;--muted:#b08050;--panel-glow:rgba(255,140,0,0.07);--header-bg:#1e1100;}
 body.theme-lightgray{--bg:#f2f4f7;--surface:#ffffff;--surface2:#edf0f4;--border:#dce1ea;--accent:#3b72c4;--accent2:#28a87a;--text:#1e2a3a;--muted:#7a8ba8;--panel-glow:rgba(59,114,196,0.04);--header-bg:#ffffff;}
+body.theme-deepblue{--bg:#06101e;--surface:#0d1e35;--surface2:#142845;--border:#1e3a5a;--accent:#1e90ff;--accent2:#00c8ff;--text:#d0e8ff;--muted:#4d7aa8;--panel-glow:rgba(30,144,255,0.08);--header-bg:#0b1a2f;}
+body.theme-classicorange{--bg:#1a0800;--surface:#2a1000;--surface2:#3a1800;--border:#5a2800;--accent:#ff6a00;--accent2:#ff9a3c;--text:#fff0e0;--muted:#a06030;--panel-glow:rgba(255,106,0,0.09);--header-bg:#200a00;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
 .header{background:var(--header-bg);border-bottom:1px solid var(--border);padding:13px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;gap:12px;flex-wrap:wrap;}
@@ -95,6 +97,8 @@ select:hover,select:focus{border-color:var(--accent);}
       <div onclick="setTheme('classic',this)" title="Classic Dark" style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#0f1117 50%,#4f8ef7 50%);border:2px solid transparent;cursor:pointer;flex-shrink:0;" class="tbtn"></div>
       <div onclick="setTheme('orange',this)" title="Full Orange" style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#1a0f00 50%,#ff8c00 50%);border:2px solid transparent;cursor:pointer;flex-shrink:0;" class="tbtn"></div>
       <div onclick="setTheme('lightgray',this)" title="Light Gray" style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#f2f4f7 50%,#3b72c4 50%);border:2px solid transparent;cursor:pointer;flex-shrink:0;" class="tbtn"></div>
+      <div onclick="setTheme('deepblue',this)" title="Deep Blue" style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#06101e 50%,#1e90ff 50%);border:2px solid transparent;cursor:pointer;flex-shrink:0;" class="tbtn"></div>
+      <div onclick="setTheme('classicorange',this)" title="Classic Orange" style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#1a0800 50%,#ff6a00 50%);border:2px solid transparent;cursor:pointer;flex-shrink:0;" class="tbtn"></div>
     </div>
   </div>
 </div>
