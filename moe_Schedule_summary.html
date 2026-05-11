@@ -6,34 +6,36 @@
 <title>moe_Schedule_summary</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#070d1a;--surface:#0d1829;--surface2:#112038;--border:#1a3050;
-  --accent:#ff8c00;--accent2:#ffb347;--accent3:#1e90ff;
-  --text:#f0f4ff;--muted:#5a7a9a;--danger:#ff5555;
-  --panel-glow:rgba(255,140,0,0.08);--header-bg:#0a1525;
-}
-/* ── THEMES ── */
+:root{--bg:#070d1a;--surface:#0d1829;--surface2:#112038;--border:#1a3050;--accent:#ff8c00;--accent2:#ffb347;--text:#f0f4ff;--muted:#5a7a9a;--panel-glow:rgba(255,140,0,0.08);--header-bg:#0a1525;}
 body.theme-classic{--bg:#0f1117;--surface:#161b27;--surface2:#1e2535;--border:#2a3347;--accent:#4f8ef7;--accent2:#6dd5b5;--text:#e8edf5;--muted:#7a8ba8;--panel-glow:rgba(79,142,247,0.06);--header-bg:#161b27;}
 body.theme-orange{--bg:#1a0f00;--surface:#241600;--surface2:#301e00;--border:#4a3010;--accent:#ff8c00;--accent2:#ffb347;--text:#fff3e0;--muted:#b08050;--panel-glow:rgba(255,140,0,0.07);--header-bg:#1e1100;}
 body.theme-lightgray{--bg:#f2f4f7;--surface:#ffffff;--surface2:#edf0f4;--border:#dce1ea;--accent:#3b72c4;--accent2:#28a87a;--text:#1e2a3a;--muted:#7a8ba8;--panel-glow:rgba(59,114,196,0.04);--header-bg:#ffffff;}
 body.theme-deepblue{--bg:#06101e;--surface:#0d1e35;--surface2:#142845;--border:#1e3a5a;--accent:#1e90ff;--accent2:#00c8ff;--text:#d0e8ff;--muted:#4d7aa8;--panel-glow:rgba(30,144,255,0.08);--header-bg:#0b1a2f;}
 body.theme-classicorange{--bg:#1a0800;--surface:#2a1000;--surface2:#3a1800;--border:#5a2800;--accent:#ff6a00;--accent2:#ff9a3c;--text:#fff0e0;--muted:#a06030;--panel-glow:rgba(255,106,0,0.09);--header-bg:#200a00;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;transition:background .3s,color .3s;}
 .header{background:var(--header-bg);border-bottom:1px solid var(--border);padding:13px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;gap:12px;flex-wrap:wrap;}
 .header-left{display:flex;align-items:center;gap:10px;}
 .logo{font-family:'DM Serif Display',serif;font-size:21px;color:var(--accent);letter-spacing:-0.5px;}
 .logo span{color:var(--accent2);}
-.tagline{color:var(--muted);font-size:11px;font-weight:300;}
+.tagline{color:var(--muted);font-size:11px;}
 .header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 .date-pill{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 13px;font-size:11px;color:var(--muted);}
 .date-pill strong{color:var(--text);}
-.moe-badge{display:flex;align-items:center;gap:6px;}
-.moe-dot{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#070d1a 50%,#ff8c00 50%);border:2px solid var(--accent);}
-.moe-label{color:var(--accent);font-weight:600;font-size:11px;}
 .login-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .2s;}
 .login-btn:hover{opacity:.85;}
 .login-btn.connected{background:rgba(30,144,255,0.2);color:#4fa8ff;cursor:default;}
+.theme-switcher{display:flex;align-items:center;gap:5px;}
+.theme-label{font-size:11px;color:var(--muted);margin-right:2px;}
+.tbtn{width:22px;height:22px;border-radius:50%;border:2px solid transparent;cursor:pointer;flex-shrink:0;transition:transform .15s,border-color .15s;}
+.tbtn:hover{transform:scale(1.18);}
+.tbtn.active{border-color:var(--text);}
+.tb-moe{background:linear-gradient(135deg,#070d1a 50%,#ff8c00 50%);}
+.tb-classic{background:linear-gradient(135deg,#0f1117 50%,#4f8ef7 50%);}
+.tb-orange{background:linear-gradient(135deg,#1a0f00 50%,#ff8c00 50%);}
+.tb-lightgray{background:linear-gradient(135deg,#f2f4f7 50%,#3b72c4 50%);}
+.tb-deepblue{background:linear-gradient(135deg,#06101e 50%,#1e90ff 50%);}
+.tb-classicorange{background:linear-gradient(135deg,#1a0800 50%,#ff6a00 50%);}
 .selector-bar{display:flex;align-items:center;gap:8px;padding:14px 22px 0;max-width:1420px;margin:0 auto;flex-wrap:wrap;}
 .sel-tab{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:7px 14px;font-size:12px;font-weight:500;cursor:pointer;color:var(--muted);transition:all .2s;user-select:none;}
 .sel-tab:hover{border-color:var(--accent);color:var(--text);}
@@ -56,13 +58,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .icon-cal{background:rgba(30,144,255,0.18);}
 .icon-mail{background:rgba(255,140,0,0.18);}
 .dd-wrap{position:relative;}
-select{appearance:none;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:5px 26px 5px 10px;border-radius:7px;cursor:pointer;outline:none;transition:border-color .2s;}
+select{appearance:none;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:5px 26px 5px 10px;border-radius:7px;cursor:pointer;outline:none;}
 select:hover,select:focus{border-color:var(--accent);}
 .dd-wrap::after{content:'▾';position:absolute;right:8px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:10px;pointer-events:none;}
 .panel-body{padding:6px 0;flex:1;overflow-y:auto;max-height:500px;}
 .panel-body::-webkit-scrollbar{width:4px;}
 .panel-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
-.item{padding:9px 15px;border-bottom:1px solid rgba(26,48,80,0.6);display:flex;align-items:flex-start;gap:9px;transition:background .15s;cursor:default;}
+.item{padding:9px 15px;border-bottom:1px solid rgba(26,48,80,0.5);display:flex;align-items:flex-start;gap:9px;transition:background .15s;}
 .item:hover{background:var(--surface2);}
 .item:last-child{border-bottom:none;}
 .item-dot{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0;}
@@ -82,7 +84,6 @@ select:hover,select:focus{border-color:var(--accent);}
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="header-left">
     <div class="logo">Moe <span>OS</span></div>
@@ -91,37 +92,26 @@ select:hover,select:focus{border-color:var(--accent);}
   <div class="header-right">
     <div class="date-pill" id="live-date"><strong>Loading...</strong></div>
     <button class="login-btn" id="auth-btn" onclick="handleAuth()">🔐 Connect Google</button>
-    <div class="theme-switcher" style="display:flex;align-items:center;gap:6px;">
-      <span style="font-size:11px;color:var(--muted);">Theme:</span>
-      <div onclick="setTheme('',this)" title="Moe OS (Default)" style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#070d1a 50%,#ff8c00 50%);border:2px solid var(--text);cursor:pointer;flex-shrink:0;" class="tbtn active"></div>
-      <div onclick="setTheme('classic',this)" title="Classic Dark" style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#0f1117 50%,#4f8ef7 50%);border:2px solid transparent;cursor:pointer;flex-shrink:0;" class="tbtn"></div>
-      <div onclick="setTheme('orange',this)" title="Full Orange" style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#1a0f00 50%,#ff8c00 50%);border:2px solid transparent;cursor:pointer;flex-shrink:0;" class="tbtn"></div>
-      <div onclick="setTheme('lightgray',this)" title="Light Gray" style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#f2f4f7 50%,#3b72c4 50%);border:2px solid transparent;cursor:pointer;flex-shrink:0;" class="tbtn"></div>
-      <div onclick="setTheme('deepblue',this)" title="Deep Blue" style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#06101e 50%,#1e90ff 50%);border:2px solid transparent;cursor:pointer;flex-shrink:0;" class="tbtn"></div>
-      <div onclick="setTheme('classicorange',this)" title="Classic Orange" style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#1a0800 50%,#ff6a00 50%);border:2px solid transparent;cursor:pointer;flex-shrink:0;" class="tbtn"></div>
+    <div class="theme-switcher">
+      <span class="theme-label">Theme:</span>
+      <div class="tbtn tb-moe active" title="Moe OS" onclick="setTheme('',this)"></div>
+      <div class="tbtn tb-classic" title="Classic Dark" onclick="setTheme('classic',this)"></div>
+      <div class="tbtn tb-orange" title="Full Orange" onclick="setTheme('orange',this)"></div>
+      <div class="tbtn tb-lightgray" title="Light Gray" onclick="setTheme('lightgray',this)"></div>
+      <div class="tbtn tb-deepblue" title="Deep Blue" onclick="setTheme('deepblue',this)"></div>
+      <div class="tbtn tb-classicorange" title="Classic Orange" onclick="setTheme('classicorange',this)"></div>
     </div>
   </div>
 </div>
-
 <div class="selector-bar">
   <div class="sel-tab active" onclick="togglePanel('cal',this)">📅 Calendar</div>
   <div class="sel-tab active" onclick="togglePanel('mail',this)">✉️ Gmail</div>
 </div>
-
 <div class="stats-row">
-  <div class="stat-card">
-    <div class="stat-icon" style="background:rgba(30,144,255,0.15)">📅</div>
-    <div><div class="stat-val" id="stat-cal">—</div><div class="stat-label">Events</div></div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-icon" style="background:rgba(255,140,0,0.15)">✉️</div>
-    <div><div class="stat-val" id="stat-mail">—</div><div class="stat-label">Unread emails</div></div>
-  </div>
+  <div class="stat-card"><div class="stat-icon" style="background:rgba(30,144,255,0.15)">📅</div><div><div class="stat-val" id="stat-cal">—</div><div class="stat-label">Events</div></div></div>
+  <div class="stat-card"><div class="stat-icon" style="background:rgba(255,140,0,0.15)">✉️</div><div><div class="stat-val" id="stat-mail">—</div><div class="stat-label">Unread emails</div></div></div>
 </div>
-
 <div class="grid" id="main-grid">
-
-  <!-- CALENDAR -->
   <div class="panel" id="panel-cal">
     <div class="panel-header">
       <div class="panel-title"><div class="panel-icon icon-cal">📅</div>Calendar</div>
@@ -147,198 +137,73 @@ select:hover,select:focus{border-color:var(--accent);}
       </div>
       <button class="refresh-btn" onclick="loadCalendar()">↻</button>
     </div>
-    <div class="panel-body" id="cal-body">
-      <div class="signin-prompt"><p>Connect Google to see your live calendar events.</p><button onclick="handleAuth()">🔐 Connect Google</button></div>
-    </div>
+    <div class="panel-body" id="cal-body"><div class="signin-prompt"><p>Connect Google to see your live calendar events.</p><button onclick="handleAuth()">🔐 Connect Google</button></div></div>
   </div>
-
-  <!-- GMAIL -->
   <div class="panel" id="panel-mail">
     <div class="panel-header">
-      <div class="panel-title">
-        <div class="panel-icon icon-mail">✉️</div>Gmail
-        <span style="font-size:10px;background:rgba(255,85,85,0.15);color:#ff5555;padding:2px 7px;border-radius:20px;margin-left:4px;font-weight:600;">UNREAD ONLY</span>
-      </div>
+      <div class="panel-title"><div class="panel-icon icon-mail">✉️</div>Gmail <span style="font-size:10px;background:rgba(255,85,85,0.15);color:#ff5555;padding:2px 7px;border-radius:20px;margin-left:4px;font-weight:600;">UNREAD ONLY</span></div>
       <button class="refresh-btn" onclick="loadMail()">↻</button>
     </div>
-    <div class="panel-body" id="mail-body">
-      <div class="signin-prompt"><p>Connect Google to see your unread emails.</p><button onclick="handleAuth()">🔐 Connect Google</button></div>
-    </div>
+    <div class="panel-body" id="mail-body"><div class="signin-prompt"><p>Connect Google to see your unread emails.</p><button onclick="handleAuth()">🔐 Connect Google</button></div></div>
   </div>
-
 </div>
-
 <script>
-const CLIENT_ID = '544721145395-pstlvshniq00gv5lgdav97nksikh1nim.apps.googleusercontent.com';
-const SCOPES = 'https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/gmail.readonly';
-let tokenClient, accessToken = null, allCalEvents = [];
-
-// Date
-function updateDate() {
-  const now = new Date();
-  document.getElementById('live-date').innerHTML = `<strong>${now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</strong> &nbsp;·&nbsp; Mumbai, India`;
-}
+var CLIENT_ID='544721145395-pstlvshniq00gv5lgdav97nksikh1nim.apps.googleusercontent.com';
+var SCOPES='https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/gmail.readonly';
+var tokenClient,accessToken=null,allCalEvents=[];
+function updateDate(){var now=new Date();document.getElementById('live-date').innerHTML='<strong>'+now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'})+'</strong> &nbsp;&middot;&nbsp; Mumbai, India';}
 updateDate();
-
-// Auth
-function initGoogleAuth() {
-  tokenClient = google.accounts.oauth2.initTokenClient({
-    client_id: CLIENT_ID,
-    scope: SCOPES,
-    callback: (resp) => {
-      if (resp.error) return;
-      accessToken = resp.access_token;
-      document.getElementById('auth-btn').textContent = '✅ Connected';
-      document.getElementById('auth-btn').classList.add('connected');
-      loadCalendar();
-      loadMail();
-    }
-  });
-}
-function handleAuth() {
-  if (accessToken) return;
-  tokenClient.requestAccessToken({ prompt: 'consent' });
-}
-
-// Calendar
-const CAT_COLORS = {
-  'ISCA':'#ff6b6b','ISCA 906':'#f5c400',
-  'PSY-636':'#a855f7','PSY-614':'#3b9eff','PSY-612':'#22c55e','Birthdays':'#f07070'
-};
-
-function detectCategory(title) {
-  if (!title) return null;
-  const t = title.toUpperCase();
-  if (t.includes('PSY-612')) return 'PSY-612';
-  if (t.includes('PSY-614')) return 'PSY-614';
-  if (t.includes('PSY-636')) return 'PSY-636';
-  if (t.includes('906') || t.includes('907')) return 'ISCA 906';
-  if (t.includes('ISCA') || t.includes('102-01')) return 'ISCA';
-  return null;
-}
-
-async function loadCalendar() {
-  if (!accessToken) return;
-  document.getElementById('cal-body').innerHTML = '<div class="loading">Loading calendar...</div>';
-  const range = document.getElementById('cal-range').value;
-  const now = new Date();
-  const y = now.getFullYear(), mo = now.getMonth(), d = now.getDate();
-  let timeMin, timeMax;
-  if (range === 'today') {
-    timeMin = new Date(y,mo,d,0,0,0,0); timeMax = new Date(y,mo,d,23,59,59,999);
-  } else if (range === 'week') {
-    timeMin = new Date(y,mo,d,0,0,0,0); timeMax = new Date(y,mo,d+7,23,59,59,999);
-  } else if (range === 'weekend') {
-    const day = now.getDay();
-    const dF = day===5?0:day===6?-1:day===0?-2:5-day;
-    timeMin = new Date(y,mo,d+dF,0,0,0,0); timeMax = new Date(y,mo,d+dF+2,23,59,59,999);
-  } else {
-    timeMin = new Date(y,mo,d,0,0,0,0); timeMax = new Date(y,mo,d+parseInt(range),23,59,59,999);
-  }
-  try {
-    const resp = await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${timeMin.toISOString()}&timeMax=${timeMax.toISOString()}&singleEvents=true&orderBy=startTime&maxResults=50`,{headers:{Authorization:`Bearer ${accessToken}`}});
-    const data = await resp.json();
-    allCalEvents = (data.items||[]).map(e=>({title:e.summary||'(No title)',date:formatEventDate(e.start),src:'My Calendar'}));
-    try {
-      const bResp = await fetch('https://www.googleapis.com/calendar/v3/calendarList',{headers:{Authorization:`Bearer ${accessToken}`}});
-      const bData = await bResp.json();
-      const bCal = (bData.items||[]).find(c=>c.summary==='Birthdays'||c.id.includes('contacts#contacts'));
-      if (bCal) {
-        const bEv = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(bCal.id)}/events?timeMin=${timeMin.toISOString()}&timeMax=${timeMax.toISOString()}&singleEvents=true&orderBy=startTime&maxResults=20`,{headers:{Authorization:`Bearer ${accessToken}`}});
-        const bEvData = await bEv.json();
-        (bEvData.items||[]).forEach(e=>allCalEvents.push({title:e.summary||'(No title)',date:formatEventDate(e.start),src:'Birthdays'}));
-      }
-    } catch(e){}
-    document.getElementById('stat-cal').textContent = allCalEvents.length;
+function initGoogleAuth(){tokenClient=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID,scope:SCOPES,callback:function(resp){if(resp.error)return;accessToken=resp.access_token;document.getElementById('auth-btn').textContent='✅ Connected';document.getElementById('auth-btn').classList.add('connected');loadCalendar();loadMail();}});}
+function handleAuth(){if(accessToken)return;tokenClient.requestAccessToken({prompt:'consent'});}
+var CAT_COLORS={'ISCA':'#ff6b6b','ISCA 906':'#f5c400','PSY-636':'#a855f7','PSY-614':'#3b9eff','PSY-612':'#22c55e','Birthdays':'#f07070'};
+function detectCategory(title){if(!title)return null;var t=title.toUpperCase();if(t.indexOf('PSY-612')!==-1)return'PSY-612';if(t.indexOf('PSY-614')!==-1)return'PSY-614';if(t.indexOf('PSY-636')!==-1)return'PSY-636';if(t.indexOf('906')!==-1||t.indexOf('907')!==-1)return'ISCA 906';if(t.indexOf('ISCA')!==-1||t.indexOf('102-01')!==-1)return'ISCA';return null;}
+async function loadCalendar(){
+  if(!accessToken)return;
+  document.getElementById('cal-body').innerHTML='<div class="loading">Loading calendar...</div>';
+  var range=document.getElementById('cal-range').value;
+  var now=new Date(),y=now.getFullYear(),mo=now.getMonth(),d=now.getDate();
+  var timeMin,timeMax;
+  if(range==='today'){timeMin=new Date(y,mo,d,0,0,0,0);timeMax=new Date(y,mo,d,23,59,59,999);}
+  else if(range==='week'){timeMin=new Date(y,mo,d,0,0,0,0);timeMax=new Date(y,mo,d+7,23,59,59,999);}
+  else if(range==='weekend'){var day=now.getDay(),dF=day===5?0:day===6?-1:day===0?-2:5-day;timeMin=new Date(y,mo,d+dF,0,0,0,0);timeMax=new Date(y,mo,d+dF+2,23,59,59,999);}
+  else{timeMin=new Date(y,mo,d,0,0,0,0);timeMax=new Date(y,mo,d+parseInt(range),23,59,59,999);}
+  try{
+    var resp=await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin='+timeMin.toISOString()+'&timeMax='+timeMax.toISOString()+'&singleEvents=true&orderBy=startTime&maxResults=50',{headers:{Authorization:'Bearer '+accessToken}});
+    var data=await resp.json();
+    allCalEvents=(data.items||[]).map(function(e){return{title:e.summary||'(No title)',date:formatEventDate(e.start),src:'My Calendar'};});
+    try{var bR=await fetch('https://www.googleapis.com/calendar/v3/calendarList',{headers:{Authorization:'Bearer '+accessToken}});var bD=await bR.json();var bC=(bD.items||[]).find(function(c){return c.summary==='Birthdays'||c.id.indexOf('contacts#contacts')!==-1;});if(bC){var bE=await fetch('https://www.googleapis.com/calendar/v3/calendars/'+encodeURIComponent(bC.id)+'/events?timeMin='+timeMin.toISOString()+'&timeMax='+timeMax.toISOString()+'&singleEvents=true&orderBy=startTime&maxResults=20',{headers:{Authorization:'Bearer '+accessToken}});var bED=await bE.json();(bED.items||[]).forEach(function(e){allCalEvents.push({title:e.summary||'(No title)',date:formatEventDate(e.start),src:'Birthdays'});});}}catch(e){}
+    document.getElementById('stat-cal').textContent=allCalEvents.length;
     filterCalendar();
-  } catch(e) {
-    document.getElementById('cal-body').innerHTML = '<div class="empty">Error loading calendar.</div>';
-  }
+  }catch(e){document.getElementById('cal-body').innerHTML='<div class="empty">Error loading calendar.</div>';}
 }
-
-function formatEventDate(start) {
-  if (!start) return '';
-  const d = new Date(start.dateTime||start.date);
-  return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',...(start.dateTime?{hour:'2-digit',minute:'2-digit'}:{})});
+function formatEventDate(start){if(!start)return'';var d=new Date(start.dateTime||start.date);var opts={weekday:'short',month:'short',day:'numeric'};if(start.dateTime){opts.hour='2-digit';opts.minute='2-digit';}return d.toLocaleDateString('en-US',opts);}
+function filterCalendar(){
+  var cat=document.getElementById('cal-cat').value;
+  var items=allCalEvents;
+  if(cat==='Birthdays')items=items.filter(function(e){return e.src==='Birthdays';});
+  else if(cat!=='all')items=items.filter(function(e){return detectCategory(e.title)===cat;});
+  var body=document.getElementById('cal-body');
+  if(!items.length){body.innerHTML='<div class="empty">No events found.</div>';return;}
+  body.innerHTML=items.map(function(e){var c=e.src==='Birthdays'?'Birthdays':detectCategory(e.title);var color=CAT_COLORS[c]||'#ff8c00';var tag=c?' <span class="cat-tag" style="background:'+color+'22;color:'+color+'">'+c+'</span>':'';return'<div class="item"><div class="item-dot" style="background:'+color+'"></div><div class="item-content"><div class="item-title">'+e.title+'</div><div class="item-meta">'+e.date+tag+'</div></div></div>';}).join('');
 }
-
-function filterCalendar() {
-  const cat = document.getElementById('cal-cat').value;
-  let items = allCalEvents;
-  if (cat === 'Birthdays') items = items.filter(e => e.src === 'Birthdays');
-  else if (cat !== 'all') items = items.filter(e => detectCategory(e.title) === cat);
-  const body = document.getElementById('cal-body');
-  if (!items.length) { body.innerHTML = '<div class="empty">No events found.</div>'; return; }
-  body.innerHTML = items.map(e => {
-    const c = e.src === 'Birthdays' ? 'Birthdays' : detectCategory(e.title);
-    const color = CAT_COLORS[c] || '#ff8c00';
-    return `<div class="item">
-      <div class="item-dot" style="background:${color}"></div>
-      <div class="item-content">
-        <div class="item-title">${e.title}</div>
-        <div class="item-meta">${e.date}${c?` <span class="cat-tag" style="background:${color}22;color:${color}">${c}</span>`:''}</div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// Gmail
-async function loadMail() {
-  if (!accessToken) return;
-  document.getElementById('mail-body').innerHTML = '<div class="loading">Loading unread emails...</div>';
-  try {
-    const resp = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=25&labelIds=INBOX&labelIds=UNREAD',{headers:{Authorization:`Bearer ${accessToken}`}});
-    const data = await resp.json();
-    const messages = data.messages||[];
-    if (!messages.length) {
-      document.getElementById('stat-mail').textContent='0';
-      document.getElementById('mail-body').innerHTML='<div class="empty">🎉 No unread emails!</div>';
-      return;
-    }
-    const details = await Promise.all(messages.slice(0,20).map(m=>
-      fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${m.id}?format=metadata&metadataHeaders=Subject&metadataHeaders=From&metadataHeaders=Date`,{headers:{Authorization:`Bearer ${accessToken}`}}).then(r=>r.json())
-    ));
-    const emails = details.map(m=>{
-      const h=m.payload?.headers||[];
-      const get=n=>(h.find(x=>x.name===n)||{}).value||'';
-      return{subject:get('Subject')||'(No subject)',sender:get('From').replace(/<.*>/,'').trim(),date:formatMailDate(get('Date')),snippet:m.snippet||''};
-    });
+async function loadMail(){
+  if(!accessToken)return;
+  document.getElementById('mail-body').innerHTML='<div class="loading">Loading unread emails...</div>';
+  try{
+    var resp=await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=25&labelIds=INBOX&labelIds=UNREAD',{headers:{Authorization:'Bearer '+accessToken}});
+    var data=await resp.json();
+    var messages=data.messages||[];
+    if(!messages.length){document.getElementById('stat-mail').textContent='0';document.getElementById('mail-body').innerHTML='<div class="empty">🎉 No unread emails!</div>';return;}
+    var details=await Promise.all(messages.slice(0,20).map(function(m){return fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/'+m.id+'?format=metadata&metadataHeaders=Subject&metadataHeaders=From&metadataHeaders=Date',{headers:{Authorization:'Bearer '+accessToken}}).then(function(r){return r.json();});}));
+    var emails=details.map(function(m){var h=m.payload&&m.payload.headers||[];function get(n){var f=h.find(function(x){return x.name===n;});return f?f.value:'';}return{subject:get('Subject')||'(No subject)',sender:get('From').replace(/<.*>/,'').trim(),date:formatMailDate(get('Date')),snippet:m.snippet||''};});
     document.getElementById('stat-mail').textContent=emails.length;
-    document.getElementById('mail-body').innerHTML=emails.map(e=>`
-      <div class="item" style="border-left:3px solid var(--accent);padding-left:12px;">
-        <div class="item-dot" style="background:var(--accent)"></div>
-        <div class="item-content">
-          <div class="item-title" style="font-weight:700;">🔵 ${e.subject}</div>
-          <div class="item-meta">${e.sender} · ${e.date} <span style="color:var(--accent);font-weight:600;font-size:10px;">UNREAD</span></div>
-          <div class="item-snippet">${e.snippet}</div>
-        </div>
-      </div>`).join('');
-  } catch(e) {
-    document.getElementById('mail-body').innerHTML='<div class="empty">Error loading emails.</div>';
-  }
+    document.getElementById('mail-body').innerHTML=emails.map(function(e){return'<div class="item" style="border-left:3px solid var(--accent);padding-left:12px;"><div class="item-dot" style="background:var(--accent)"></div><div class="item-content"><div class="item-title" style="font-weight:700;">🔵 '+e.subject+'</div><div class="item-meta">'+e.sender+' &middot; '+e.date+' <span style="color:var(--accent);font-weight:600;font-size:10px;">UNREAD</span></div><div class="item-snippet">'+e.snippet+'</div></div></div>';}).join('');
+  }catch(e){document.getElementById('mail-body').innerHTML='<div class="empty">Error loading emails.</div>';}
 }
-
-function formatMailDate(s) {
-  if(!s)return'';
-  try{const d=new Date(s),t=new Date();if(d.toDateString()===t.toDateString())return'Today '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});}catch(e){return s;}
-}
-
-// Theme
-function setTheme(name,btn){
-  document.body.className = name ? 'theme-'+name : '';
-  document.querySelectorAll('.tbtn').forEach(b=>b.style.borderColor='transparent');
-  btn.style.borderColor='var(--text)';
-}
-
-// Panel toggle
-const panelState={cal:true,mail:true};
-function togglePanel(id,btn){
-  panelState[id]=!panelState[id];
-  btn.classList.toggle('active',panelState[id]);
-  document.getElementById('panel-'+id).classList.toggle('grid-hidden',!panelState[id]);
-  const active=Object.values(panelState).filter(Boolean).length;
-  document.getElementById('main-grid').className='grid'+(active===1?' one-col':'');
-}
+function formatMailDate(s){if(!s)return'';try{var d=new Date(s),t=new Date();if(d.toDateString()===t.toDateString())return'Today '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});}catch(e){return s;}}
+var panelState={cal:true,mail:true};
+function togglePanel(id,btn){panelState[id]=!panelState[id];btn.classList.toggle('active',panelState[id]);document.getElementById('panel-'+id).classList.toggle('grid-hidden',!panelState[id]);var active=Object.values(panelState).filter(Boolean).length;document.getElementById('main-grid').className='grid'+(active===1?' one-col':'');}
+function setTheme(name,btn){document.body.className=name?'theme-'+name:'';document.querySelectorAll('.tbtn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');}
 </script>
 <script src="https://accounts.google.com/gsi/client" onload="initGoogleAuth()"></script>
 </body>
